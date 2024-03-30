@@ -1,11 +1,14 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router";
+import { useAuthState } from "react-firebase-hooks/auth";
+
 import { UNAUTHORIZED } from "../../Utils/UserStates.js";
 import AuthContext from "../AuthContext/AuthContext.js";
-import "./Dashboard.css";
+import Navbar from "../Navbar/Navbar.js";
+import CompanyCard from "../CompanyCard/CompanyCard.js";
 import { auth } from "../../Firebase.js";
-import Navbar from "../Navbar/Navbar";
-import { useAuthState } from "react-firebase-hooks/auth";
+
+import "./Dashboard.css";
 
 import {
     Card,
@@ -25,18 +28,18 @@ function Dashboard() {
 
     let navigate = useNavigate();
 
-    
+
     // TODO: this doesn't work, fix redirect
     useEffect(() => {
-      if ((!user && !loading)) {
-        navigate("/");
-      }
+        if ((!user && !loading)) {
+            navigate("/");
+        }
     }, [user, loading]);
 
     const [favorites, setFavorites] = useState([]);
     const [id, setId] = useState(auth.currentUser.uid);
 
-    
+
     useEffect(() => {
         setFavorites([{
             name: "Company 1",
