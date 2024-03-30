@@ -1,7 +1,8 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 
 function MiniChart({ ticker }) {
     const container = useRef();
+    const scriptLoaded = useRef(false);
 
     useEffect(() => {
         const script = document.createElement("script");
@@ -10,7 +11,7 @@ function MiniChart({ ticker }) {
         script.async = true;
         script.innerHTML = `
       {
-        "symbol": "NASDAQ:TSLA",
+        "symbol": "NASDAQ:${ticker}",
         "autosize": true,   
         "locale": "en",
         "dateRange": "12M",
@@ -20,12 +21,13 @@ function MiniChart({ ticker }) {
         "largeChartUrl": ""
       }`;
         container.current.appendChild(script);
+        scriptLoaded.current = true;
 
-    }, [ticker]);
+    }, [ticker, scriptLoaded]);
 
     useEffect(() => {
         container.current.style.pointerEvents = "none";
-      }, []);
+    }, []);
 
     return (
         <div className="tradingview-widget-container" ref={container}>
