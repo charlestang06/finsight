@@ -1,0 +1,3 @@
+export const AUTHENTICATED = "AUTHENTICATED";
+export const UNAUTHORIZED = "UNAUTHORIZED";
+export const LOGOUT = "LOGOUT";
