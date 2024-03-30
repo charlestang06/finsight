@@ -1,10 +1,12 @@
 // CompanyCard.js
 import React from "react";
 import { Card } from "antd";
-import { navigate } from "@reach/router";
-import { Meta } from "antd";
+import { useNavigate } from "react-router-dom";
+import Meta from "antd/es/card/Meta.js";
 
 const CompanyCard = ({ company }) => {
+    let navigate = useNavigate();
+
     return (
         <Card
             style={{ width: 300, margin: "1rem" }}
