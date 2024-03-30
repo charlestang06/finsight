@@ -16,12 +16,16 @@ function MiniChart({ ticker }) {
         "dateRange": "12M",
         "colorTheme": "light",
         "isTransparent": false,
-        "autosize": false,
+        "autosize": true,
         "largeChartUrl": ""
       }`;
-        container.current.appendChild(script);
-
-    }, [ticker]);
+        if (container.current.firstChild) {
+            container.current.removeChild(container.current.firstChild);
+        }
+        else {
+          container.current.appendChild(script);
+        }
+    }, []);
 
     useEffect(() => {
         container.current.style.pointerEvents = "none";
