@@ -1,5 +1,5 @@
-# FastAPI for PubMed RAG
-
+# FastAPI for Finsight RAG
+# uvicorn main:app --reload
 # Imports
 import uvicorn
 from typing import List
