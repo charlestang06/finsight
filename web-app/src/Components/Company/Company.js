@@ -25,6 +25,7 @@ import AuthContext from "../AuthContext/AuthContext";
 import Navbar from "../Navbar/Navbar";
 import "./Company.css";
 import RequestUtils from "../../Utils/RequestUtils";
+import MediumChart from "../TradingChart/MediumChart";
 
 const { Content } = Layout;
 const { TextArea } = Input;
@@ -32,7 +33,6 @@ const { RangePicker } = DatePicker;
 
 function Company() {
     // AUTHENTICATION
-
     const { userImpl } = useContext(AuthContext);
     let params = useParams();
 
@@ -44,7 +44,7 @@ function Company() {
     const [id, setId] = useState(params.id);
     const [company, setCompany] = useState({
         name: "Google Inc.",
-        ticker: "GOOG",
+        ticker: id,
         description: "Description",
         website: "https://www.google.com",
     });
@@ -83,10 +83,10 @@ function Company() {
     function askQuestion(e) {
         e.stopPropagation();
         let message = currentMessage;
-        setMessageHistory([...messageHistory, {message: message, sender: "user"}]);
+        setMessageHistory([...messageHistory, { message: message, sender: "user" }]);
         RequestUtils.get("/getChat?ticker=" + id + "&length=" + days + "&query=" + message).then((response) => {
             response.json().then((data) => {
-                setMessageHistory([...messageHistory, {message: message, sender: "user"}, {message: data.response, sender: "bot"}]);
+                setMessageHistory([...messageHistory, { message: message, sender: "user" }, { message: data.response, sender: "bot" }]);
             });
         });
         setCurrentMessage("");
@@ -102,57 +102,52 @@ function Company() {
                 },
             }}
         >
-    <Layout className="white">
-        <Navbar tab={"2"}/>
-        <Layout
-            className="white"
-        >
-            <Content
-                style={{
-                    margin: 0,
-                    background: colorBgContainer,
-                    borderRadius: borderRadiusLG,
-                    display: "flex",
-                    justifyContent: "center",
-                }}
-                className="mx-auto"
-            >
-            <Layout
-                style={{
-                    padding: "24px 100px 24px",
-                }}
-                className="white"
-            >
-                {/* <Breadcrumb style={{ margin: "16px 0 32px", }}>
-                    {<Breadcrumb.Item><a href="/dashboard">Back to dashboard</a></Breadcrumb.Item>}
-                   
-                </Breadcrumb>  */}
-                <Content
-                    style={{
-                        minHeight: 280,
-                        background: colorBgContainer,
-                        borderRadius: borderRadiusLG,
-                        display: "flex",
-                        justifyContent: "center",
-                        height: "100%",
-                    }}
-                    className="mx-auto"
+            <Layout className="white">
+                <Navbar tab={"2"} />
+                <Layout
+                    className="white"
+                >
+                    <Content
+                        style={{
+                            margin: 0,
+                            background: colorBgContainer,
+                            borderRadius: borderRadiusLG,
+                            display: "flex",
+                            justifyContent: "center",
+                        }}
+                        className="mx-auto"
                     >
-                        
-                    <Row style={{width: "80vw", display: "flex", height: "100%"}}>
-                        <Col span={7} style={{ marginRight: "36px" }} >
-                        <Card className="profile-card" >
-                                <Meta
-                                    title={company.ticker}
-                                    description={company.name}
-                                    style={{
-                                        display: "flex",
-                                        flexDirection: "column",
-                                        alignItems: "center",
-                                        textAlign: "center",
-                                    }}
-                                />
-                                <Divider />
+                        <Layout
+                            style={{
+                                padding: "24px 100px 24px",
+                            }}
+                            className="white"
+                        >
+                            <Content
+                                style={{
+                                    minHeight: 280,
+                                    background: colorBgContainer,
+                                    borderRadius: borderRadiusLG,
+                                    display: "flex",
+                                    justifyContent: "center",
+                                    height: "100%",
+                                }}
+                                className="mx-auto"
+                            >
+                                <Row style={{ width: "80vw", display: "flex", height: "100%" }}>
+                                    <Col span={7} style={{ marginRight: "36px" }} >
+                                        {/* <Card className="profile-card" >
+                                            <Meta
+                                                title={company.ticker}
+                                                description={company.name}
+                                                style={{
+                                                    display: "flex",
+                                                    flexDirection: "column",
+                                                    alignItems: "center",
+                                                    textAlign: "center",
+                                                }}
+                                            />
+                                            <Divider />
 
                                             <div>
                                                 <div style={{ marginBottom: "5px" }}>
@@ -172,60 +167,61 @@ function Company() {
                                                     </div>
                                                 </div>
 
-                                    <div style={{ margin: "24px 0 4px" }}>
-                                        {company.description}
-                                    </div>
-                                </div>
-                            </Card>
-                        </Col>
+                                                <div style={{ margin: "24px 0 4px" }}>
+                                                    {company.description}
+                                                </div>
+                                            </div>
+                                        </Card> */}
+                                        <MediumChart ticker={id} />
+                                    </Col>
 
-                        <Col span={16}>
-                            <h1 style={{ margin: "0 0 0" }}>
-                                Your 
-                                <Select
-                                    defaultValue="1"
-                                    style={{
-                                        margin: "0 16px",
-                                        width: 120,
-                                    }}
-                                    onChange={(value) => setDays(value)}
-                                    options={[
-                                        { value: "1", label: "Daily" },
-                                        { value: "7", label: "Weekly" },
-                                        { value: "30", label: "Monthly" },
-                                        { value: "90", label: "Quarterly" },
-                                        { value: "365", label: "Yearly" },
-                                    ]}
-                                />
-                                Report
-                            </h1>
-                        
-                            <div style={{height: '100%'}}>
-                                <div className="message-history" 
-                                    style={{
-                                        display: "flex",
-                                        flexDirection: "column",
-                                        gap: "1rem",
-                                        marginBottom: "1rem",
-                                        overflowY: "auto",
-                                    }}
-                                    >
-                                    {messageHistory.map((message) => (
-                                        <Markdown className="message">
-                                            {/* <span style={{fontWeight: "bold"}}>{message.sender}: </span> */}
-                                           {message.message}
-                                        </Markdown>
-                                    ))}
-                                </div>
-                                <div className="message-input" style={{display: "flex", gap: "1rem"}}>
-                                    <TextArea autoSize className="ask-box" value={currentMessage} onChange={(e) => setCurrentMessage(e.target.value)} placeholder="Ask a clarifying question..." />
-                                    <Button type="primary" onClick={(e) => {askQuestion(e)}}><SendOutlined /></Button>
-                                </div>
-                            </div>
-                        </Col>
-                    </Row>
-                </Content>
-            </Layout>
+                                    <Col span={16}>
+                                        <h1 style={{ margin: "0 0 0" }}>
+                                            Your
+                                            <Select
+                                                defaultValue="1"
+                                                style={{
+                                                    margin: "0 16px",
+                                                    width: 120,
+                                                }}
+                                                onChange={(value) => setDays(value)}
+                                                options={[
+                                                    { value: "1", label: "Daily" },
+                                                    { value: "7", label: "Weekly" },
+                                                    { value: "30", label: "Monthly" },
+                                                    { value: "90", label: "Quarterly" },
+                                                    { value: "365", label: "Yearly" },
+                                                ]}
+                                            />
+                                            Report
+                                        </h1>
+
+                                        <div style={{ height: '100%' }}>
+                                            <div className="message-history"
+                                                style={{
+                                                    display: "flex",
+                                                    flexDirection: "column",
+                                                    gap: "1rem",
+                                                    marginBottom: "1rem",
+                                                    overflowY: "auto",
+                                                }}
+                                            >
+                                                {messageHistory.map((message) => (
+                                                    <Markdown className="message">
+                                                        {/* <span style={{fontWeight: "bold"}}>{message.sender}: </span> */}
+                                                        {message.message}
+                                                    </Markdown>
+                                                ))}
+                                            </div>
+                                            <div className="message-input" style={{ display: "flex", gap: "1rem" }}>
+                                                <TextArea autoSize className="ask-box" value={currentMessage} onChange={(e) => setCurrentMessage(e.target.value)} placeholder="Ask a clarifying question..." />
+                                                <Button type="primary" onClick={(e) => { askQuestion(e) }}><SendOutlined /></Button>
+                                            </div>
+                                        </div>
+                                    </Col>
+                                </Row>
+                            </Content>
+                        </Layout>
 
                     </Content>
                 </Layout>

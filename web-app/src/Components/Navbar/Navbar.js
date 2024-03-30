@@ -21,13 +21,10 @@ import { UNAUTHORIZED } from "../../Utils/UserStates.js";
 const { Header, Sider, Content } = Layout;
 
 
-
 function Navbar(props) {
     let navigate = useNavigate();
     let [tab, setTab] = useState("1");
-
     const { setUserImpl } = useContext(AuthContext);
-
 
     let [user, loading] = useAuthState(auth);
 

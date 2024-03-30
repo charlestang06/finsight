@@ -30,7 +30,6 @@ function Dashboard() {
 
     let navigate = useNavigate();
 
-
     // TODO: this doesn't work, fix redirect
     useEffect(() => {
         if ((!user && !loading)) {
