@@ -25,6 +25,7 @@ import AuthContext from "../AuthContext/AuthContext";
 import Navbar from "../Navbar/Navbar";
 import "./Company.css";
 import RequestUtils from "../../Utils/RequestUtils";
+import MediumChart from "../TradingChart/MediumChart";
 
 const { Content } = Layout;
 const { TextArea } = Input;
@@ -32,7 +33,6 @@ const { RangePicker } = DatePicker;
 
 function Company() {
     // AUTHENTICATION
-
     const { userImpl } = useContext(AuthContext);
     let params = useParams();
 
@@ -86,14 +86,13 @@ function Company() {
     function askQuestion(e) {
         e.stopPropagation();
         let message = currentMessage;
-        setMessageHistory([...messageHistory, {message: message, sender: "user"}]);
+        setMessageHistory([...messageHistory, { message: message, sender: "user" }]);
         RequestUtils.get("/getChat?ticker=" + id + "&length=" + days + "&query=" + message).then((response) => {
             response.json().then((data) => {
-                setMessageHistory([...messageHistory, {message: message, sender: "user"}, {message: data.response, sender: "bot"}]);
+                setMessageHistory([...messageHistory, { message: message, sender: "user" }, { message: data.response, sender: "bot" }]);
             });
         });
         setCurrentMessage("");
-        // get response and add to messageHistory
     }
 
     // RENDER
@@ -177,13 +176,9 @@ function Company() {
                                         <span style={{ marginLeft: 8 }}><a href={company.website}>{company.website}</a> </span>
                                     </div>
                                 </div>
-
-                                <div style={{ margin: "24px 0 4px" }}>
-                                    {company.description}
-                                </div>
+                                    <MediumChart ticker={id} />
                             </div>
-                        </Card>
-                    </Col>
+                        </Col>
 
                         <Col span={12}>
                             <h1 style={{ margin: "0 0 0" }}>
