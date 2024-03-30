@@ -8,9 +8,13 @@ import {
     Row,
     theme,
     Card,
-    Divider
+    Divider,
+    Tabs,
+    Select,
+    Button,
+    Space,
 } from "antd";
-import { HomeOutlined, PlusOutlined } from "@ant-design/icons";
+import { HomeOutlined, PlusOutlined, SendOutlined } from "@ant-design/icons";
 import Meta from "antd/es/card/Meta.js";
 
 import React, { useContext, useEffect, useState } from "react";
@@ -43,14 +47,20 @@ function Company() {
         description: "Description",
         website: "https://www.google.com",
     });
-    const [days, setDays] = useState(1); // 1, 7, 30, 365
+    const [days, setDays] = useState(1); // 1, 7, 30, 90, 365
     const [analysis, setAnalysis] = useState("lorem ipsum dolor sit amet, consectetur adipiscing elit.");
+    const [messageHistory, setMessageHistory] = useState([]);
+    const [currentMessage, setCurrentMessage] = useState("");
 
     useEffect(() => {
         // RequestUtils.get("/get/%7Bresponse%7D%7D?ticker=" + id + "&length=" + days).then((response) => {
         //     setAnalysis(response.data.response);
         // });
     }, [id, days]);
+
+    useEffect(() => {
+        setMessageHistory([{message: analysis, sender: "bot"}]);
+    }, [analysis]);
 
     // CHECK USERIMPL FOR USER
     useEffect(() => {
@@ -59,6 +69,22 @@ function Company() {
         }
     }, [navigate]);
 
+    const { TabPane } = Tabs;
+
+    function askQuestion(e) {
+        e.stopPropagation();
+        // RequestUtils.get("/get/%7Bresponse%7D%7D?ticker=" + id + "&length=" + days).then((response) => {
+        //     setAnalysis(response.data.response);
+        // });
+        let message = currentMessage;
+        setMessageHistory([...messageHistory, {message: message, sender: "user"}, {message: "lorem ipsum dolor sit amet, consectetur adipiscing elit.", sender: "bot"}]);
+        setCurrentMessage("");
+        // get response and add to messageHistory
+    }
+
+    useEffect(() => {   
+        document.querySelector(".ask-box").value = "";
+    }, [messageHistory]);
        
     // RENDER
     return (
@@ -69,22 +95,21 @@ function Company() {
                 },
             }}
         >
-            <Layout className="white">
-                <Navbar tab={"2"}/>
-                <Layout
-                    className="white"
-                >
-                    <Content
-                        style={{
-                            margin: 0,
-                            minHeight: 280,
-                            background: colorBgContainer,
-                            borderRadius: borderRadiusLG,
-                            display: "flex",
-                            justifyContent: "center",
-                        }}
-                        className="mx-auto"
-                    >
+    <Layout className="white">
+        <Navbar tab={"2"}/>
+        <Layout
+            className="white"
+        >
+            <Content
+                style={{
+                    margin: 0,
+                    background: colorBgContainer,
+                    borderRadius: borderRadiusLG,
+                    display: "flex",
+                    justifyContent: "center",
+                }}
+                className="mx-auto"
+            >
             <Layout
                 style={{
                     padding: "24px 100px 24px",
@@ -102,10 +127,12 @@ function Company() {
                         borderRadius: borderRadiusLG,
                         display: "flex",
                         justifyContent: "center",
+                        height: "100%",
                     }}
                     className="mx-auto"
-                >
-                    <Row style={{width: "80vw"}}>
+                    >
+                        
+                    <Row style={{width: "80vw", display: "flex", height: "100%"}}>
                         <Col span={7} style={{ marginRight: "36px" }} >
                         <Card className="profile-card" >
                                 <Meta
@@ -132,7 +159,7 @@ function Company() {
                                         >
                                             <div style={{ display: "flex", alignItems: "center" }}>
                                                 <HomeOutlined style={{ marginRight: 8 }} />
-                                                <span style={{ fontWeight: "bold" }}>Website</span>
+                                      <span style={{ fontWeight: "bold" }}>Website</span>
                                             </div>
                                             <span style={{ marginLeft: 8 }}><a href={company.website}>{company.website}</a> </span>
                                         </div>
@@ -144,8 +171,50 @@ function Company() {
                                 </div>
                             </Card>
                         </Col>
+
                         <Col span={16}>
-                            
+                            <h1 style={{ margin: "0 0 12px" }}>
+                                Your 
+                                <Select
+                                    defaultValue="1"
+                                    style={{
+                                        margin: "0 16px",
+                                        width: 120,
+                                    }}
+                                    onChange={(value) => setDays(value)}
+                                    options={[
+                                        { value: "1", label: "Daily" },
+                                        { value: "7", label: "Weekly" },
+                                        { value: "30", label: "Monthly" },
+                                        { value: "90", label: "Quarterly" },
+                                        { value: "365", label: "Yearly" },
+                                    ]}
+                                />
+                                Report
+                            </h1>
+                        
+                            <div style={{height: '100%'}}>
+                                <div className="message-history" 
+                                    style={{
+                                        display: "flex",
+                                        flexDirection: "column",
+                                        gap: "1rem",
+                                        marginBottom: "1rem",
+                                        overflowY: "auto",
+                                    }}
+                                    >
+                                    {messageHistory.map((message) => (
+                                        <div className="message">
+                                            <span style={{fontWeight: "bold"}}>{message.sender}: </span>
+                                           {message.message}
+                                        </div>
+                                    ))}
+                                </div>
+                                <div className="message-input" style={{display: "flex", gap: "1rem"}}>
+                                    <TextArea autoSize className="ask-box" value={currentMessage} onChange={(e) => setCurrentMessage(e.target.value)} placeholder="Ask a clarifying question..." />
+                                    <Button type="primary" onClick={(e) => {askQuestion(e)}}><SendOutlined /></Button>
+                                </div>
+                            </div>
                         </Col>
                     </Row>
                 </Content>
