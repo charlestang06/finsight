@@ -13,7 +13,7 @@ const CompanyCard = ({ company }) => {
             style={{ width: 300, margin: "1rem" }}
             className="card1, glow"
             onClick={() => {
-                navigate("/companies/" + company.id);
+                navigate("/companies/" + company.ticker);
             }}
         >
             <Meta

@@ -43,10 +43,11 @@ function Company() {
 
     const [id, setId] = useState(params.id);
     const [company, setCompany] = useState({
-        name: "Google Inc.",
-        ticker: "GOOG",
-        description: "Description",
-        website: "https://www.google.com",
+        name: "",
+        description: "",
+        website: "",
+        marketCap: 0,
+        links: [],
     });
     const [days, setDays] = useState(1); // 1, 7, 30, 90, 365
     const [analysis, setAnalysis] = useState("lorem ipsum dolor sit amet, consectetur adipiscing elit.");
@@ -54,9 +55,11 @@ function Company() {
     const [currentMessage, setCurrentMessage] = useState("");
 
     useEffect(() => {
-        // RequestUtils.get("/company/?ticker=" + id).then((response) => {
-        //     setCompany(response.data);
-        // });
+        RequestUtils.get("/company/" + id).then((response) => {
+            response.json().then((data) => {
+                setCompany(data);
+            });
+        });
     }, []);
 
     useEffect(() => {
@@ -65,7 +68,7 @@ function Company() {
                 setAnalysis(data.response);
             });
         });
-    }, [id, days]);
+    }, [id, days, company]);
 
     useEffect(() => {
         setMessageHistory([{ message: analysis, sender: "bot" }]);
@@ -93,24 +96,18 @@ function Company() {
         // get response and add to messageHistory
     }
 
-    useEffect(() => {
-        document.querySelector(".ask-box").value = "";
-    }, [messageHistory]);
-
     // RENDER
     return (
-        <ConfigProvider
-            theme={{
-                token: {
-                    colorPrimary: "#7E70CC",
-                },
-            }}
-        >
-    <Layout className="white">
+    <ConfigProvider
+        theme={{
+            token: {
+                colorPrimary: "#7E70CC",
+            },
+        }}
+    >
+    <Layout className="white" style={{}}>
         <Navbar tab={"2"}/>
-        <Layout
-            className="white"
-        >
+        
             <Content
                 style={{
                     margin: 0,
@@ -123,7 +120,7 @@ function Company() {
             >
             <Layout
                 style={{
-                    padding: "24px 100px 24px",
+                    padding: "24px 40px 24px",
                 }}
                 className="white"
             >
@@ -139,51 +136,56 @@ function Company() {
                         display: "flex",
                         justifyContent: "center",
                         height: "100%",
+                        margin: 0,
                     }}
-                    className="mx-auto"
+                    className=""
                     >
                         
-                    <Row style={{width: "80vw", display: "flex", height: "100%"}}>
-                        <Col span={7} style={{ marginRight: "36px" }} >
-                        <Card className="profile-card" >
-                                <Meta
-                                    title={company.ticker}
-                                    description={company.name}
-                                    style={{
-                                        display: "flex",
-                                        flexDirection: "column",
-                                        alignItems: "center",
-                                        textAlign: "center",
-                                    }}
-                                />
-                                <Divider />
+                    <Row style={{width: "100%", display: "flex"}}>
+                        <Col span={11} style={{ marginRight: "36px" }} >
+                        <Card  style={{}} >
+                            <div className="profile-card">
 
-                                            <div>
-                                                <div style={{ marginBottom: "5px" }}>
-                                                    <div
-                                                        style={{
-                                                            display: "flex",
-                                                            alignItems: "center",
-                                                            justifyContent: "space-between",
-                                                            gap: "1rem"
-                                                        }}
-                                                    >
-                                                        <div style={{ display: "flex", alignItems: "center" }}>
-                                                            <HomeOutlined style={{ marginRight: 8 }} />
-                                                            <span style={{ fontWeight: "bold" }}>Website</span>
-                                                        </div>
-                                                        <span style={{ marginLeft: 8 }}><a href={company.website}>{company.website}</a> </span>
-                                                    </div>
-                                                </div>
+                            <Meta
+                                title={id}
+                                description={company.name}
+                                style={{
+                                    display: "flex",
+                                    flexDirection: "column",
+                                    alignItems: "center",
+                                    textAlign: "center",
+                                }}
+                            />
+                            </div>
 
-                                    <div style={{ margin: "24px 0 4px" }}>
-                                        {company.description}
+                            <Divider />
+
+                            <div>
+                                <div style={{ marginBottom: "5px" }}>
+                                    <div
+                                        style={{
+                                            display: "flex",
+                                            alignItems: "center",
+                                            justifyContent: "space-between",
+                                            gap: "1rem"
+                                        }}
+                                    >
+                                        <div style={{ display: "flex", alignItems: "center" }}>
+                                            <HomeOutlined style={{ marginRight: 8 }} />
+                                            <span style={{ fontWeight: "bold" }}>Website</span>
+                                        </div>
+                                        <span style={{ marginLeft: 8 }}><a href={company.website}>{company.website}</a> </span>
                                     </div>
                                 </div>
-                            </Card>
-                        </Col>
 
-                        <Col span={16}>
+                                <div style={{ margin: "24px 0 4px" }}>
+                                    {company.description}
+                                </div>
+                            </div>
+                        </Card>
+                    </Col>
+
+                        <Col span={12}>
                             <h1 style={{ margin: "0 0 0" }}>
                                 Your 
                                 <Select
@@ -232,7 +234,6 @@ function Company() {
             </Layout>
 
                     </Content>
-                </Layout>
             </Layout>
         </ConfigProvider>
 
