@@ -9,10 +9,15 @@ import { Button, Layout, Menu, Modal } from "antd";
 import { BiBuildingHouse, BiLogOut, BiSolidCity } from "react-icons/bi";
 import { useNavigate } from "react-router-dom";
 import "./Navbar.css";
-import { useEffect, useState } from "react";
+
+import { useEffect, useState, useContext } from "react";
 import { auth, logout } from "../../Firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 import RequestUtils from "../../Utils/RequestUtils";
+
+import AuthContext from "../AuthContext/AuthContext";
+import { UNAUTHORIZED } from "../../Utils/UserStates.js";
+
 const { Header, Sider, Content } = Layout;
 
 
@@ -20,6 +25,9 @@ const { Header, Sider, Content } = Layout;
 function Navbar(props) {
     let navigate = useNavigate();
     let [tab, setTab] = useState("1");
+
+    const { setUserImpl } = useContext(AuthContext);
+
 
     let [user, loading] = useAuthState(auth);
 
