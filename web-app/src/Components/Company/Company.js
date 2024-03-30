@@ -35,12 +35,12 @@ function Company() {
 
     // CHECK USERIMPL FOR USER
     useEffect(() => {
-        if(userImpl == UNAUTHORIZED) {
+        if (userImpl == UNAUTHORIZED) {
             navigate("/");
         }
     }, [navigate])
 
-       
+
     // RENDER
     return (
         <ConfigProvider
@@ -51,7 +51,7 @@ function Company() {
             }}
         >
             <Layout className="white">
-                <Navbar tab={"2"}/>
+                <Navbar tab={"2"} />
                 <Layout
                     className="white"
                 >
@@ -66,38 +66,38 @@ function Company() {
                         }}
                         className="mx-auto"
                     >
-            <Layout
-                style={{
-                    padding: "24px 100px 24px",
-                }}
-                className="white"
-            >
-                <Breadcrumb style={{ margin: "16px 0 32px", }}>
-                    {<Breadcrumb.Item><a href="/dashboard">Back to dashboard</a></Breadcrumb.Item>}
-                   
-                </Breadcrumb> 
-                <Content
-                    style={{
-                        minHeight: 280,
-                        background: colorBgContainer,
-                        borderRadius: borderRadiusLG,
-                        display: "flex",
-                        justifyContent: "center",
-                    }}
-                    className="mx-auto"
-                >
-                    <Row style={{width: "80vw"}}>
-                        <Col span={7} style={{ marginRight: "36px" }} >
-                            
-                        </Col>
-                        <Col span={16}>
-                            
-                        </Col>
-                    </Row>
-                </Content>
-            </Layout>
+                        <Layout
+                            style={{
+                                padding: "24px 100px 24px",
+                            }}
+                            className="white"
+                        >
+                            <Breadcrumb
+                                style={{ margin: "16px 0 32px" }}
+                                items={[{ title: <a href="/dashboard">Back to dashboard</a> }]}
+                            />
+                            <Content
+                                style={{
+                                    minHeight: 280,
+                                    background: colorBgContainer,
+                                    borderRadius: borderRadiusLG,
+                                    display: "flex",
+                                    justifyContent: "center",
+                                }}
+                                className="mx-auto"
+                            >
+                                <Row style={{ width: "80vw" }}>
+                                    <Col span={7} style={{ marginRight: "36px" }} >
 
-            </Content>
+                                    </Col>
+                                    <Col span={16}>
+
+                                    </Col>
+                                </Row>
+                            </Content>
+                        </Layout>
+
+                    </Content>
                 </Layout>
             </Layout>
         </ConfigProvider>
