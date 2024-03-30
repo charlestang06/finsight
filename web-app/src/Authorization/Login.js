@@ -27,6 +27,7 @@ function Login() {
     }
     if (user) {
       setUserImpl(user);
+      navigate("/dashboard");
     } else {
       navigate("/");
     }

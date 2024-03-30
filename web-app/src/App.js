@@ -7,6 +7,7 @@ import { auth } from "./Firebase";
 import Login from "./Authorization/Login";
 import Dashboard from "./Components/Dashboard/Dashboard";
 import NotFound from "./Components/NotFound/NotFound";
+import Company from "./Components/Company/Company";
 import authContext from "./Components/AuthContext/AuthContext";
 import RequestUtils from "./Utils/RequestUtils";
 
@@ -37,6 +38,7 @@ function App() {
             <Routes>
               <Route path="/" element={<Login />} />
               <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/companies/:id" element={<Company />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>

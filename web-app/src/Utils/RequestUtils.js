@@ -35,17 +35,6 @@ class RequestUtils {
             body: JSON.stringify(object)
         });
     }
-
-    static isCompany(id) {
-        return RequestUtils.get("/company?id=" + id)
-        .then((response) => response.json())
-        .then((data) => {
-            if (data.status === 200) {
-                return true;
-            }
-            return false;
-      })
-    }
 }
 
 export default RequestUtils;
