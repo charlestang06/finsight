@@ -18,6 +18,10 @@ import {
     ConfigProvider,
     Layout,
     theme,
+    Card,
+    ConfigProvider,
+    Layout,
+    theme,
 } from "antd";
 import Meta from "antd/es/card/Meta.js";
 

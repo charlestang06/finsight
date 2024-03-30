@@ -8,9 +8,13 @@ import {
     Row,
     theme,
     Card,
-    Divider
+    Divider,
+    Tabs,
+    Select,
+    Button,
+    Space,
 } from "antd";
-import { HomeOutlined, PlusOutlined } from "@ant-design/icons";
+import { HomeOutlined, PlusOutlined, SendOutlined } from "@ant-design/icons";
 import Meta from "antd/es/card/Meta.js";
 
 import React, { useContext, useEffect, useState } from "react";
@@ -43,14 +47,20 @@ function Company() {
         description: "Description",
         website: "https://www.google.com",
     });
-    const [days, setDays] = useState(1); // 1, 7, 30, 365
+    const [days, setDays] = useState(1); // 1, 7, 30, 90, 365
     const [analysis, setAnalysis] = useState("lorem ipsum dolor sit amet, consectetur adipiscing elit.");
+    const [messageHistory, setMessageHistory] = useState([]);
+    const [currentMessage, setCurrentMessage] = useState("");
 
     useEffect(() => {
         // RequestUtils.get("/get/%7Bresponse%7D%7D?ticker=" + id + "&length=" + days).then((response) => {
         //     setAnalysis(response.data.response);
         // });
     }, [id, days]);
+
+    useEffect(() => {
+        setMessageHistory([{ message: analysis, sender: "bot" }]);
+    }, [analysis]);
 
     // CHECK USERIMPL FOR USER
     useEffect(() => {
@@ -59,6 +69,22 @@ function Company() {
         }
     }, [navigate]);
 
+    const { TabPane } = Tabs;
+
+    function askQuestion(e) {
+        e.stopPropagation();
+        // RequestUtils.get("/get/%7Bresponse%7D%7D?ticker=" + id + "&length=" + days).then((response) => {
+        //     setAnalysis(response.data.response);
+        // });
+        let message = currentMessage;
+        setMessageHistory([...messageHistory, { message: message, sender: "user" }, { message: "lorem ipsum dolor sit amet, consectetur adipiscing elit.", sender: "bot" }]);
+        setCurrentMessage("");
+        // get response and add to messageHistory
+    }
+
+    useEffect(() => {
+        document.querySelector(".ask-box").value = "";
+    }, [messageHistory]);
 
     // RENDER
     return (
@@ -77,7 +103,6 @@ function Company() {
                     <Content
                         style={{
                             margin: 0,
-                            minHeight: 280,
                             background: colorBgContainer,
                             borderRadius: borderRadiusLG,
                             display: "flex",
@@ -102,10 +127,12 @@ function Company() {
                                     borderRadius: borderRadiusLG,
                                     display: "flex",
                                     justifyContent: "center",
+                                    height: "100%",
                                 }}
                                 className="mx-auto"
                             >
-                                <Row style={{ width: "80vw" }}>
+
+                                <Row style={{ width: "80vw", display: "flex", height: "100%" }}>
                                     <Col span={7} style={{ marginRight: "36px" }} >
                                         <Card className="profile-card" >
                                             <Meta
