@@ -60,11 +60,11 @@ function Company() {
     }, []);
 
     useEffect(() => {
-        RequestUtils.get("/get?ticker=" + id + "&length=" + days).then((response) => {
-            response.json().then((data) => {
-                setAnalysis(data.response);
-            });
-        });
+        // RequestUtils.get("/get?ticker=" + id + "&length=" + days).then((response) => {
+        //     response.json().then((data) => {
+        //         setAnalysis(data.response);
+        //     });
+        // });
     }, [id, days]);
 
     useEffect(() => {
