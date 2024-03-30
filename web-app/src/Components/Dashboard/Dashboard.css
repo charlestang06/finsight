@@ -1,0 +1,34 @@
+.white {
+    background-color: white!important;
+}
+
+.card1 {
+    margin-left: 15px;
+}
+
+.mx-auto {
+    margin-left: auto!important;
+    margin-right: auto!important;
+}
+
+.nom {
+    margin-top: 0px!important;
+    margin-bottom: 0px!important;
+}
+
+.ant-list-item.project-list-item:hover {
+    background-color: #f9f9f9;
+    border-radius: 4px;
+}
+
+.card1 .ant-card-body {
+    cursor: pointer !important;
+}
+
+.glow {
+    transition: box-shadow 0.3s ease-in-out;
+}
+
+.glow:hover {
+    box-shadow: 0 0 20px 2px rgba(0, 0, 0, 0.15); /* Adjust the glow effect */
+}
