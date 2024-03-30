@@ -287,7 +287,7 @@ app = FastAPI(
 def read_root():
     return {"Hello": "World"}
 
-@app.get("/get/{response}")
+@app.get("/get/")
 def answer(ticker: str, length: int):
     response = get_summary(ticker, length)
     return response
@@ -297,7 +297,7 @@ def company(ticker: str):
     response = get_company_info(ticker)
     return response
 
-@app.get("/getChat/{response}")
+@app.get("/getChat/")
 def chat(ticker: str, length: int, query: str):
     response = get_chat_response(ticker, length, query)
     return response
