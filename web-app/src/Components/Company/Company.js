@@ -16,6 +16,7 @@ import {
 } from "antd";
 import { HomeOutlined, PlusOutlined, SendOutlined } from "@ant-design/icons";
 import Meta from "antd/es/card/Meta.js";
+import Markdown from 'react-markdown';
 
 import React, { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -53,9 +54,17 @@ function Company() {
     const [currentMessage, setCurrentMessage] = useState("");
 
     useEffect(() => {
-        // RequestUtils.get("/get/%7Bresponse%7D%7D?ticker=" + id + "&length=" + days).then((response) => {
-        //     setAnalysis(response.data.response);
+        // RequestUtils.get("/company/?ticker=" + id).then((response) => {
+        //     setCompany(response.data);
         // });
+    }, []);
+
+    useEffect(() => {
+        RequestUtils.get("/get?ticker=" + id + "&length=" + days).then((response) => {
+            response.json().then((data) => {
+                setAnalysis(data.response);
+            });
+        });
     }, [id, days]);
 
     useEffect(() => {
@@ -73,11 +82,13 @@ function Company() {
 
     function askQuestion(e) {
         e.stopPropagation();
-        // RequestUtils.get("/get/%7Bresponse%7D%7D?ticker=" + id + "&length=" + days).then((response) => {
-        //     setAnalysis(response.data.response);
-        // });
         let message = currentMessage;
-        setMessageHistory([...messageHistory, {message: message, sender: "user"}, {message: "lorem ipsum dolor sit amet, consectetur adipiscing elit.", sender: "bot"}]);
+        setMessageHistory([...messageHistory, {message: message, sender: "user"}]);
+        RequestUtils.get("/getChat?ticker=" + id + "&length=" + days + "&query=" + message).then((response) => {
+            response.json().then((data) => {
+                setMessageHistory([...messageHistory, {message: message, sender: "user"}, {message: data.response, sender: "bot"}]);
+            });
+        });
         setCurrentMessage("");
         // get response and add to messageHistory
     }
@@ -116,10 +127,10 @@ function Company() {
                 }}
                 className="white"
             >
-                <Breadcrumb style={{ margin: "16px 0 32px", }}>
+                {/* <Breadcrumb style={{ margin: "16px 0 32px", }}>
                     {<Breadcrumb.Item><a href="/dashboard">Back to dashboard</a></Breadcrumb.Item>}
                    
-                </Breadcrumb> 
+                </Breadcrumb>  */}
                 <Content
                     style={{
                         minHeight: 280,
@@ -173,7 +184,7 @@ function Company() {
                         </Col>
 
                         <Col span={16}>
-                            <h1 style={{ margin: "0 0 12px" }}>
+                            <h1 style={{ margin: "0 0 0" }}>
                                 Your 
                                 <Select
                                     defaultValue="1"
@@ -204,10 +215,10 @@ function Company() {
                                     }}
                                     >
                                     {messageHistory.map((message) => (
-                                        <div className="message">
-                                            <span style={{fontWeight: "bold"}}>{message.sender}: </span>
+                                        <Markdown className="message">
+                                            {/* <span style={{fontWeight: "bold"}}>{message.sender}: </span> */}
                                            {message.message}
-                                        </div>
+                                        </Markdown>
                                     ))}
                                 </div>
                                 <div className="message-input" style={{display: "flex", gap: "1rem"}}>

@@ -1,9 +1,10 @@
-# FastAPI for PubMed RAG
-
+# FastAPI for Finance RAG
+# uvicorn main:app --reload
 # Imports
 import uvicorn
 from typing import List
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_community.llms import Ollama
 from langchain_core.output_parsers import StrOutputParser
@@ -282,12 +283,20 @@ app = FastAPI(
     description="An API server using FastAPI",
 )
 
+# CORS
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.get("/")
 def read_root():
     return {"Hello": "World"}
 
-@app.get("/get/{response}")
+@app.get("/get")
 def answer(ticker: str, length: int):
     response = get_summary(ticker, length)
     return response
@@ -297,7 +306,7 @@ def company(ticker: str):
     response = get_company_info(ticker)
     return response
 
-@app.get("/getChat/{response}")
+@app.get("/getChat")
 def chat(ticker: str, length: int, query: str):
     response = get_chat_response(ticker, length, query)
     return response
