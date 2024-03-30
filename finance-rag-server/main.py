@@ -1,9 +1,11 @@
 # FastAPI for Finsight RAG
 # uvicorn main:app --reload
 # Imports
+from fastapi.responses import PlainTextResponse
 import uvicorn
 from typing import List
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_community.llms import Ollama
 from langchain_core.output_parsers import StrOutputParser
@@ -282,32 +284,40 @@ app = FastAPI(
     description="An API server using FastAPI",
 )
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=['*'],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
-@app.get("/")
+
+@app.get("/", response_class=PlainTextResponse)
 def read_root():
     return {"Hello": "World"}
 
-@app.get("/get/")
+@app.get("/get", response_class=PlainTextResponse)
 def answer(ticker: str, length: int):
     response = get_summary(ticker, length)
     return response
 
-@app.get("/company/{ticker}")
+@app.get("/company/{ticker}", response_class=PlainTextResponse)
 def company(ticker: str):
     response = get_company_info(ticker)
     return response
 
-@app.get("/getChat/")
+@app.get("/getChat", response_class=PlainTextResponse)
 def chat(ticker: str, length: int, query: str):
     response = get_chat_response(ticker, length, query)
     return response
 
-@app.get("/get_favorites/{user_id}")
+@app.get("/get_favorites/{user_id}", response_class=PlainTextResponse)
 def favorites(user_id: str):
     response = get_user_favorites(user_id)
     return response
 
-@app.post("/post_favorites/")
+@app.post("/post_favorites")
 def favorites(user_id: str, favorites: List[str]):
     send_user_favorites(user_id, favorites)
     return {"response": True}

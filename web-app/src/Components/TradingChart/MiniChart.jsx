@@ -10,7 +10,7 @@ function MiniChart({ ticker }) {
         script.async = true;
         script.innerHTML = `
       {
-        "symbol": "NASDAQ:TSLA",
+        "symbol": "TSLA",
         "autosize": true,   
         "locale": "en",
         "dateRange": "12M",
