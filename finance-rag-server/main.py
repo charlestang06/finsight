@@ -1,6 +1,7 @@
-# FastAPI for Finance RAG
+# FastAPI for Finsight RAG
 # uvicorn main:app --reload
 # Imports
+from fastapi.responses import PlainTextResponse
 import uvicorn
 from typing import List
 from fastapi import FastAPI
@@ -316,7 +317,7 @@ def favorites(user_id: str):
     response = get_user_favorites(user_id)
     return response
 
-@app.post("/post_favorites/")
+@app.post("/post_favorites")
 def favorites(user_id: str, favorites: List[str]):
     send_user_favorites(user_id, favorites)
     return {"response": True}

@@ -68,12 +68,12 @@ function Company() {
     }, [id, days]);
 
     useEffect(() => {
-        setMessageHistory([{message: analysis, sender: "bot"}]);
+        setMessageHistory([{ message: analysis, sender: "bot" }]);
     }, [analysis]);
 
     // CHECK USERIMPL FOR USER
     useEffect(() => {
-        if(userImpl == UNAUTHORIZED) {
+        if (userImpl == UNAUTHORIZED) {
             navigate("/");
         }
     }, [navigate]);
@@ -93,10 +93,10 @@ function Company() {
         // get response and add to messageHistory
     }
 
-    useEffect(() => {   
+    useEffect(() => {
         document.querySelector(".ask-box").value = "";
     }, [messageHistory]);
-       
+
     // RENDER
     return (
         <ConfigProvider
@@ -158,23 +158,23 @@ function Company() {
                                 />
                                 <Divider />
 
-                                <div>
-                                    <div style={{ marginBottom: "5px" }}>
-                                        <div
-                                            style={{
-                                                display: "flex",
-                                                alignItems: "center",
-                                                justifyContent: "space-between",
-                                                gap: "1rem"
-                                            }}
-                                        >
-                                            <div style={{ display: "flex", alignItems: "center" }}>
-                                                <HomeOutlined style={{ marginRight: 8 }} />
-                                      <span style={{ fontWeight: "bold" }}>Website</span>
-                                            </div>
-                                            <span style={{ marginLeft: 8 }}><a href={company.website}>{company.website}</a> </span>
-                                        </div>
-                                    </div>
+                                            <div>
+                                                <div style={{ marginBottom: "5px" }}>
+                                                    <div
+                                                        style={{
+                                                            display: "flex",
+                                                            alignItems: "center",
+                                                            justifyContent: "space-between",
+                                                            gap: "1rem"
+                                                        }}
+                                                    >
+                                                        <div style={{ display: "flex", alignItems: "center" }}>
+                                                            <HomeOutlined style={{ marginRight: 8 }} />
+                                                            <span style={{ fontWeight: "bold" }}>Website</span>
+                                                        </div>
+                                                        <span style={{ marginLeft: 8 }}><a href={company.website}>{company.website}</a> </span>
+                                                    </div>
+                                                </div>
 
                                     <div style={{ margin: "24px 0 4px" }}>
                                         {company.description}
@@ -231,7 +231,7 @@ function Company() {
                 </Content>
             </Layout>
 
-            </Content>
+                    </Content>
                 </Layout>
             </Layout>
         </ConfigProvider>

@@ -7,6 +7,9 @@ import AuthContext from "../AuthContext/AuthContext.js";
 import Navbar from "../Navbar/Navbar.js";
 import CompanyCard from "../CompanyCard/CompanyCard.js";
 import { auth } from "../../Firebase.js";
+import dummyFavorites from "./dummyFavorites.js"; // Import the dummy data
+import MiniChart from "../TradingChart/MiniChart.jsx";
+
 
 import "./Dashboard.css";
 
@@ -39,51 +42,36 @@ function Dashboard() {
     const [favorites, setFavorites] = useState([]);
     const [id, setId] = useState(auth.currentUser.uid);
 
+
     useEffect(() => {
-      setFavorites([{
-          name: "Company 1",
-          ticker: "C1",
-        },
-      ])
-        // RequestUtils.get("/favorites?user=" + id).then((response) => {
-        //   setFavorites(response.data);
-        // });
+        setFavorites(dummyFavorites);
     }, [id]);
 
     const { Content } = Layout;
 
-    return (<>
-        <ConfigProvider
-            theme={{
-                token: {
-                    colorPrimary: "#786AC9",
-                },
-            }}
-        >
-            <Layout className="">
-                <Navbar tab={"2"} />
-                <Content
-                    className="mx-auto"
-                >
-                    {favorites.map((card) => (
-                        <Card
-                            style={{ width: 300, margin: "1rem" }}
-                            className="card1, glow"
-                            onClick={() => {
-                                navigate("/companies/" + card.id);
-                            }}
-                        >
-                            <Meta
-                                title={card.ticker}
-                                description={card.name}
-                                style={{ marginBottom: 20 }}
-                            />
-                        </Card>
-                    ))}
-                </Content>
-            </Layout>
-        </ConfigProvider>
-    </>
+    return (
+        <>
+            <ConfigProvider
+                theme={{
+                    token: { colorPrimary: "#786AC9" },
+                }}
+            >
+                <Layout className="">
+                    <Navbar tab={"2"} />
+                    <Content className="mx-auto" style={{ overflowY: 'auto', maxHeight: 'calc(100vh - 64px)' }}>
+                        <h1>Welcome back, user!</h1>
+                        <div>
+                            <h2>
+                                Favorites
+                            </h2>
+                            {favorites.map((company) => (
+                                <CompanyCard key={company.id} company={company} navigate={navigate} />
+                            ))}
+                        </div>
+                    </Content>
+                </Layout>
+            </ConfigProvider>
+        </>
     );
 }
 

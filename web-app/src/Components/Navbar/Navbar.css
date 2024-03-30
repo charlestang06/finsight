@@ -10,8 +10,9 @@
     transition: all 0.3s ease;
 
 }
+
 .nobg:hover {
-    background: none!important;
+    background: none !important;
     box-shadow: none;
     border: none;
     color: white;
@@ -20,12 +21,6 @@
     margin: 0;
     cursor: pointer;
     transition: all 0.3s ease;
-}
-
-.logo-container {
-    height: 100%;
-    display: flex;
-    align-items: center;
 }
 
 .logo-container {

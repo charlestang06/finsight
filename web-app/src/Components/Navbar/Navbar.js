@@ -20,24 +20,14 @@ import { UNAUTHORIZED } from "../../Utils/UserStates.js";
 
 const { Header, Sider, Content } = Layout;
 
+
+
 function Navbar(props) {
     let navigate = useNavigate();
     let [tab, setTab] = useState("1");
 
     const { setUserImpl } = useContext(AuthContext);
 
-    const items1 = [
-        {
-            key: "1",
-            icon: <BiBuildingHouse />,
-            title: "Home",
-            label: "Home",
-            onClick: () => {
-
-                navigate("/dashboard");
-            },
-        },
-    ];
 
     let [user, loading] = useAuthState(auth);
 
@@ -58,36 +48,26 @@ function Navbar(props) {
                 backgroundColor: "white",
             }}
         >
-            <div className="demo-logo" />
-            <Menu
-                theme="light"
-                mode="horizontal"
-                defaultSelectedKeys={[props.tab != undefined ? props.tab : "0"]}
-                items={items1}
-                style={{
-                    flex: 1,
-                    minWidth: 0,
-                    fontSize: "16px",
-                }}
-            />
-            
-            {
-            <>
-            <Button className="nobg"
-                // onClick={() => navigate("/notifications")}
-                style={{ marginRight: "25px" }}
-                onClick={() => setNotifsOpen(true)}
-            >
-                <BellOutlined style={{ fontSize: "20px", color: "black" }} />
-            </Button>
-            
-            </>}
-            <Button onClick={() => {logout();} } className="nobg">
-                <LogoutOutlined style={{ fontSize: "20px", color: "black", }} />
-            </Button>
-            <Modal title="Notifications" open={notifsOpen} onOk={() => setNotifsOpen(false)} onCancel={() => setNotifsOpen(false)}>
-                <p>You have no notifications. Have a beautiful day!</p>
-            </Modal>
+            <div className="logo-container" onClick={() => navigate("/dashboard")}>
+                <img src={logoImg} alt="Logo" className="logo" />
+            </div>
+
+            <div className="right-buttons">
+                <Button
+                    onClick={() => {
+                        navigate("/profile/" + id);
+                    }}
+                    className="nobg"
+                >
+                    <UserOutlined
+                        style={{ fontSize: "20px", color: "black", marginRight: "25px" }}
+                    />
+                </Button>
+
+                <Button onClick={() => logout()} className="nobg">
+                    <LogoutOutlined style={{ fontSize: "20px", color: "black" }} />
+                </Button>
+            </div>
         </Header>
     );
 }
