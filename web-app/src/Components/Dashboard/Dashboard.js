@@ -5,6 +5,7 @@ import AuthContext from "../AuthContext/AuthContext.js";
 import "./Dashboard.css";
 import { auth } from "../../Firebase.js";
 import Navbar from "../Navbar/Navbar";
+import { useAuthState } from "react-firebase-hooks/auth";
 
 import {
   Card,
@@ -20,26 +21,25 @@ function Dashboard() {
         token: { colorBgContainer, borderRadiusLG },
     } = theme.useToken();
 
-    const { userImpl } = useContext(AuthContext);
-
-    const [favorites, setFavorites] = useState([]);
-    const [id, setId] = useState(auth.currentUser.uid);
+    let [user, loading] = useAuthState(auth);
 
     let navigate = useNavigate();
 
+    
+    // TODO: this doesn't work, fix redirect
     useEffect(() => {
-        if (userImpl == UNAUTHORIZED) {
-          navigate("/");
-        } else if (userImpl) {
-          navigate("/dashboard");
-        }
-      }, [navigate]);
+      if ((!user && !loading)) {
+        navigate("/");
+      }
+    }, [user, loading]);
+
+    const [favorites, setFavorites] = useState([]);
+    const [id, setId] = useState(auth.currentUser.uid);
 
     useEffect(() => {
       setFavorites([{
           name: "Company 1",
           ticker: "C1",
-          id: 1
         },
       ])
         // RequestUtils.get("/favorites?user=" + id).then((response) => {
@@ -79,7 +79,7 @@ function Dashboard() {
                         style={{ width: 300, margin: "1rem" }}
                         className="card1, glow"
                         onClick={() => {
-                          navigate("/companies/" + card.id);
+                          navigate("/companies/" + card.ticker);
                         }}
                       >
                         <Meta
