@@ -293,26 +293,26 @@ app.add_middleware(
 )
 
 
-@app.get("/", response_class=PlainTextResponse)
+@app.get("/")
 def read_root():
     return {"Hello": "World"}
 
-@app.get("/get", response_class=PlainTextResponse)
+@app.get("/get")
 def answer(ticker: str, length: int):
     response = get_summary(ticker, length)
     return response
 
-@app.get("/company/{ticker}", response_class=PlainTextResponse)
+@app.get("/company/{ticker}")
 def company(ticker: str):
     response = get_company_info(ticker)
     return response
 
-@app.get("/getChat", response_class=PlainTextResponse)
+@app.get("/getChat")
 def chat(ticker: str, length: int, query: str):
     response = get_chat_response(ticker, length, query)
     return response
 
-@app.get("/get_favorites/{user_id}", response_class=PlainTextResponse)
+@app.get("/get_favorites/{user_id}")
 def favorites(user_id: str):
     response = get_user_favorites(user_id)
     return response
