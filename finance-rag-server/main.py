@@ -42,9 +42,9 @@ session = CachedLimiterSession(
 model = "gemma:2b"
 prompt = ChatPromptTemplate.from_template(
     """
-[INST] Write a brief summary outlining the key points and financial indicators for the stock ticker focused on the past {period}. 
+[INST] Write an in-depth financial review outlining the important key takeaways based on financial indicators and data for the stock ticker focused on the past {period}. 
 Make sure to higlight any specific outlier data points and provide a brief analysis of the {name}'s financial health and future outlook, highlighting specific data. 
-Write as if it was a report to an investor interested in {name}, and to recommend whether this stock seems like a good buy or sell. [/INST]
+Write as if it was a report to an investor interested in {name}, and to recommend whether this stock seems like a good buy or sell. Make sure to mention the company's name: {name} [/INST]
  
 Stock ticker: {ticker}
 Company name: {name}
@@ -68,6 +68,7 @@ Period: {period}
 </Relevant News>
 
 <Output Template>
+{name} ({ticker}) Financial Review
 Key Points:
 [bulleted list]
 
@@ -161,9 +162,9 @@ def get_stock_info(ticker: str, length: int):
         "currency": stock.info["currency"] if "currency" in stock.info else None,
         "info": stock.info,
         "price_history": (
-            stock.history(start=start_date, end=end_date)
+            stock.history(start=start_date, end=end_date).iloc[::6]
             if length <= 90
-            else stock.history(start=start_date, end=end_date).ilo[::5]
+            else stock.history(start=start_date, end=end_date).iloc[::30]
         ),
         "income_statement": stock.income_stmt.iloc[:, :1],
         "balance_sheet": stock.balance_sheet.iloc[:20, :1],
@@ -196,7 +197,6 @@ def get_summary(ticker: str, length: int):
     response = "Invalid stock ticker"
 
     if data["name"]:
-
         # firebase caching
         typePeriod = lengthStr[lengthInt.index(length)]
         currentDay = pd.Timestamp.today().day
@@ -213,7 +213,7 @@ def get_summary(ticker: str, length: int):
         elif typePeriod == "month":
             docName = f"{ticker}-{currentMonth}-{currentYear}"
         elif typePeriod == "quarter":
-            docName = f"{ticker}-{int(currentMonth / 3)}-{currentYear}"
+            docName = f"{ticker}-Q{int(currentMonth / 3)}-{currentYear}"
         elif typePeriod == "year":
             docName = f"{ticker}-{currentYear}"
 
@@ -233,7 +233,22 @@ def get_summary(ticker: str, length: int):
     return {
         "response": response,
     }
-    
+
+def get_chat_response(ticker: str, length: int, query: str):
+    response = get_summary(ticker, length)
+    promptChat = ChatPromptTemplate.from_template(
+        """
+        Answer as if you are a financial analyst. 
+        <Context>
+        {context}
+        <Context>  
+        Query: {query}                              
+        """
+                                                  )
+    chatChain = promptChat | llm
+    output = chatChain.invoke({"context": response["response"], "query": query})
+    return {"response": output}
+
 def get_company_info(ticker: str):
     temp_data = get_stock_info(ticker, 30)
     return {
@@ -244,6 +259,21 @@ def get_company_info(ticker: str):
         "marketCap": temp_data["marketCap"]
     }
 
+# create user or update favorites
+def send_user_favorites(user_id: str, favorites: List[str]):
+    user_ref = db.collection("users").document(user_id)
+    user_ref.set(
+        {
+            "favorites": favorites
+        })
+
+def get_user_favorites(user_id: str):
+    try: 
+        user_ref = db.collection("users").document(user_id)
+        favorites = user_ref.get().to_dict()["favorites"]
+    except:
+        favorites = []
+    return favorites
 
 # App Configs
 app = FastAPI(
@@ -257,7 +287,6 @@ app = FastAPI(
 def read_root():
     return {"Hello": "World"}
 
-
 @app.get("/get/{response}")
 def answer(ticker: str, length: int):
     response = get_summary(ticker, length)
@@ -267,6 +296,21 @@ def answer(ticker: str, length: int):
 def company(ticker: str):
     response = get_company_info(ticker)
     return response
+
+@app.get("/getChat/{response}")
+def chat(ticker: str, length: int, query: str):
+    response = get_chat_response(ticker, length, query)
+    return response
+
+@app.get("/get_favorites/{user_id}")
+def favorites(user_id: str):
+    response = get_user_favorites(user_id)
+    return response
+
+@app.post("/post_favorites/")
+def favorites(user_id: str, favorites: List[str]):
+    send_user_favorites(user_id, favorites)
+    return {"response": True}
 
 if __name__ == "__main__":
     uvicorn.run("main:app", port=8000, log_level="info")

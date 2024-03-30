@@ -1,3 +1,5 @@
+import logoImg from "../../assets/images/public.png";
+
 import {
     BellOutlined,
     UserOutlined,
