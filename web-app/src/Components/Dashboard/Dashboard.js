@@ -1,3 +1,27 @@
+<<<<<<< HEAD
+import React, { useState, useEffect, useContext } from "react";
+import { useNavigate } from "react-router";
+import "./Dashboard.css";
+import AuthContext from "../AuthContext/AuthContext.js";
+import { UNAUTHORIZED } from "../../Utils/UserStates.js";
+
+import {
+  ConfigProvider,
+} from "antd";
+
+function Dashboard() {
+    const { userImpl } = useContext(AuthContext);
+
+    let navigate = useNavigate();
+
+    useEffect(() => {
+        if (userImpl == UNAUTHORIZED) {
+          navigate("/");
+        } else if (userImpl) {
+          navigate("/dashboard");
+        }
+      }, [navigate]);
+=======
 import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { useAuthState } from "react-firebase-hooks/auth";
@@ -53,6 +77,7 @@ function Dashboard() {
     }, [id]);
 
     const { Content } = Layout;
+>>>>>>> 08d596aa614caf2bd3e5a30adb64adb6bfee3f21
 
     return (<>
         <ConfigProvider

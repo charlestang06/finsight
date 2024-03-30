@@ -20,3 +20,15 @@
     background-color: #f9f9f9;
     border-radius: 4px;
 }
+
+.card1 .ant-card-body {
+    cursor: pointer !important;
+}
+
+.glow {
+    transition: box-shadow 0.3s ease-in-out;
+}
+
+.glow:hover {
+    box-shadow: 0 0 20px 2px rgba(0, 0, 0, 0.15); /* Adjust the glow effect */
+}
