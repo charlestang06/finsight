@@ -3,7 +3,8 @@ const dummyFavorites = [
         name: "Walmart Inc.",
         ticker: "WMT",
         id: 1,
-    },
+    }
+    ,
     {
         name: "Amazon.com Inc.",
         ticker: "AMZN",

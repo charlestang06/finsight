@@ -9,24 +9,25 @@ function MiniChart({ ticker }) {
         script.src = "https://s3.tradingview.com/external-embedding/embed-widget-mini-symbol-overview.js";
         script.type = "text/javascript";
         script.async = true;
-        script.innerHTML = `
-      {
-        "symbol": "NASDAQ:${ticker}",
-        "autosize": true,   
-        "locale": "en",
-        "dateRange": "12M",
-        "colorTheme": "light",
-        "isTransparent": false,
-        "autosize": false,
-        "largeChartUrl": ""
-      }`;
-        container.current.appendChild(script);
-        scriptLoaded.current = true;
-
-    }, [ticker, scriptLoaded]);
-
-    useEffect(() => {
+        script.innerHTML = `{
+            "borderColor": "#ffffff",
+            "symbol": "${ticker}",
+            "autosize": true,   
+            "locale": "en",
+            "dateRange": "12M",
+            "colorTheme": "light",
+            "isTransparent": false,
+            "autosize": true,
+            "largeChartUrl": ""
+        }`;
+        if (container.current.firstChild) {
+            container.current.removeChild(container.current.firstChild);
+        }
+        else {
+            container.current.appendChild(script);
+        }
         container.current.style.pointerEvents = "none";
+        container.current.style.border = "#ffffff";
     }, []);
 
     return (

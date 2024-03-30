@@ -82,10 +82,6 @@ function Company() {
         // get response and add to messageHistory
     }
 
-    useEffect(() => {
-        document.querySelector(".ask-box").value = "";
-    }, [messageHistory]);
-
     // RENDER
     return (
         <ConfigProvider
