@@ -78,12 +78,6 @@ function Navbar(props) {
             >
                 <BellOutlined style={{ fontSize: "20px", color: "black" }} />
             </Button>
-            <Button onClick={() => {
-                navigate("/profile/" + id);
-
-            }} className="nobg">
-                <UserOutlined style={{ fontSize: "20px", color: "black", marginRight: "25px" }} />
-            </Button>
             
             </>}
             <Button onClick={() => {logout();} } className="nobg">

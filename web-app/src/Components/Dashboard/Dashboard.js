@@ -64,7 +64,6 @@ function Dashboard() {
       setFavorites([{
           name: "Company 1",
           ticker: "C1",
-          id: 1
         },
       ])
         // RequestUtils.get("/favorites?user=" + id).then((response) => {
@@ -108,7 +107,7 @@ function Dashboard() {
                         style={{ width: 300, margin: "1rem" }}
                         className="card1, glow"
                         onClick={() => {
-                          navigate("/companies/" + card.id);
+                          navigate("/companies/" + card.ticker);
                         }}
                       >
                         <Meta
