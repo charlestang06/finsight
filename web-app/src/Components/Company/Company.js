@@ -363,8 +363,7 @@ function Company() {
                                                         {typing === index ?
 
                                                         <>
-                                                            <RobotOutlined /> Finn
-                                                            <p></p>
+                                                            {analysis.length == 0 || messageHistory.length % 2 === 0 ?  <></> : <><RobotOutlined /> Finn<p></p></>}
                                                             <AIWriter>
                                                                 <Markdown>{message.message}</Markdown>
                                                             </AIWriter>

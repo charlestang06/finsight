@@ -22,7 +22,9 @@ function DefinitionDrawer({ openDrawer, setOpenDrawer, terms }) {
                 <h1 style={{ fontFamily: 'Newsreader' }}>Relevant definitions</h1>
                 <br />
                 {Object.keys(terms).map((term) => (
-                    <p key={term}><strong>{term}:</strong> {terms[term]}</p>
+                    <div style={{fontSize: 17, lineHeight: "1.2em"}}>
+                        <p key={term}><strong>{term}:</strong> {terms[term]}</p>
+                    </div>
                 ))}
             </Drawer>
         </ConfigProvider >
