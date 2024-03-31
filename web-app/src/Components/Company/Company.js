@@ -26,6 +26,7 @@ import Navbar from "../Navbar/Navbar";
 import "./Company.css";
 import RequestUtils from "../../Utils/RequestUtils";
 import MediumChart from "../TradingChart/MediumChart";
+import FinInfo from "../TradingChart/FinInfo";
 
 const { Content } = Layout;
 const { TextArea } = Input;
@@ -137,6 +138,8 @@ function Company() {
                             <Row style={{ width: "100%", display: "flex" }}>
                                 <Col span={11} style={{ border: '2px #cccccc solid', borderRadius: 8, padding: 20, height: '80%' }} >
                                     <MediumChart ticker={id} />
+                                    <FinInfo ticker={id} />
+                                    
                                 </Col>
 
                                 <Col span={1}></Col>
