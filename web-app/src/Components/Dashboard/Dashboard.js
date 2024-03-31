@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState, setState } from "react";
-import { useNavigate } from "react-router";
+import { useNavigate, useParams } from "react-router";
+import { useSearchParams } from "react-router-dom";
 import { useAuthState } from "react-firebase-hooks/auth";
 
 import { UNAUTHORIZED } from "../../Utils/UserStates.js";
@@ -33,6 +34,7 @@ function Dashboard() {
 
     let [user, loading] = useAuthState(auth);
     let navigate = useNavigate();
+    const [searchParams, setSearchParams] = useSearchParams();
 
     // TODO: this doesn't work, fix redirect
     useEffect(() => {
@@ -43,7 +45,7 @@ function Dashboard() {
 
     const [favorites, setFavorites] = useState([]);
     const [id, setId] = useState(0);
-    const [joyrideCompleted, setJoyrideCompleted] = useState(localStorage.getItem('joyrideCompleted') === 'true');
+    const [joyrideCompleted, setJoyrideCompleted] = useState(true);
 
     useEffect(() => {
         if (user) {
@@ -56,11 +58,10 @@ function Dashboard() {
         }
     }, [user]);
 
-
     const { Content } = Layout;
 
     const [joyrideState, setJoyrideState] = useState({
-        run: localStorage.getItem('joyrideCompleted') === 'true',
+        run: !joyrideCompleted,
         steps: [
             {
                 target: "html",
@@ -74,24 +75,59 @@ function Dashboard() {
             },
             {
                 target: ".favorite-section i",
-                content: "Once you have a stock in your favorites, it will display here. Click on it to learn more about that stock and advice on investing.",
+                content: "Once you have a stock in your favorites, it will display here. Click on it to learn more about that stock and gain LLM-powered investing advice.",
             }
         ]
     })
 
     useEffect(() => {
-        setTimeout(() => {
-            setJoyrideState((prevState) => ({
-                ...prevState,
-                run: true,
-            }));
-        }, 1000)
+        RequestUtils.get("/get_tutorial/" + user.uid).then((response) => {
+            response.json().then((data) => {
+                if (data >= 1) {
+                    setJoyrideState((prevState) => ({
+                        ...prevState,
+                        run: false,
+                    }));
+                    setJoyrideCompleted(true);
+                }
+                else {
+                    setJoyrideState((prevState) => ({
+                        ...prevState,
+                        run: true,
+                    }));
+                    setJoyrideCompleted(false)
+                }
+            });
+        })
+    }, []);
+
+    // todo: fix scroll
+    useEffect(() => {
+        const hash = window.location.hash.slice(1);
+        if (hash) {
+          const element = document.getElementById(hash);
+          if (element) element.scrollIntoView();
+        }
+     }, []);
+
+    useEffect(() => {
+        if (!joyrideCompleted) {
+            setTimeout(() => {
+                setJoyrideState((prevState) => ({
+                    ...prevState,
+                    run: true,
+                }));
+            }, 1000)
+        }
     })
 
     const handleJoyrideCallback = (data) => {
         const { action, status, type } = data;
 
         if (action === 'close' || status === 'finished') {
+            RequestUtils.post("/post_tutorial?user_id=" + user.uid + "&tutorial=" + 1).then((response) => {
+            });
+
             setJoyrideState((prevState) => ({
                 ...prevState,
                 run: false,
@@ -152,7 +188,7 @@ function Dashboard() {
                     </Content>
                 </Layout>
             </ConfigProvider>
-            <Joyride
+            {!joyrideCompleted ? <Joyride
                 steps={joyrideState.steps}
                 callback={handleJoyrideCallback}
                 continuous={true}
@@ -163,7 +199,7 @@ function Dashboard() {
                         primaryColor: "#033d03",
                     }
                 }}
-            />
+            /> : <></>}
         </>
     );
 }

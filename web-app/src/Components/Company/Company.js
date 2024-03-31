@@ -42,6 +42,8 @@ import Joyride from 'react-joyride';
 import DefinitionDrawer from "./DefinitionDrawer";
 import MessageComponent from "./MessageComponent";
 import definitions from "./definitions.js";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { auth } from "../../Firebase.js";
 
 const { Content } = Layout;
 const { TextArea } = Input;
@@ -51,6 +53,13 @@ function Company() {
     // AUTHENTICATION
     const { userImpl } = useContext(AuthContext);
     let params = useParams();
+    const [ user, loading ] = useAuthState(auth)
+    
+    // useEffect(() => {
+    //     if (user) {
+            
+    //     }
+    // }, [user]);
 
     const {
         token: { colorBgContainer, borderRadiusLG },
@@ -150,20 +159,45 @@ function Company() {
     }, [typing]);
 
     useEffect(() => {
-        const timer = setTimeout(() => {
-            setJoyrideState((prevState) => ({
-                ...prevState,
-                run: true,
-            }));
-        }, 1300);
+        if (!joyrideCompanyCompleted) {
+            const timer = setTimeout(() => {
+                setJoyrideState((prevState) => ({
+                    ...prevState,
+                    run: true,
+                }));
+            }, 1300);
+    
+            return () => clearTimeout(timer);
+        }
+    }, []);
 
-        return () => clearTimeout(timer);
+    useEffect(() => {
+        RequestUtils.get("/get_tutorial/" + user.uid).then((response) => {
+            response.json().then((data) => {
+                if (data >= 2) {
+                    setJoyrideState((prevState) => ({
+                        ...prevState,
+                        run: false,
+                    }));
+                    setJoyrideCompanyCompleted(true);
+                }
+                else {
+                    setJoyrideState((prevState) => ({
+                        ...prevState,
+                        run: true,
+                    }));
+                    setJoyrideCompanyCompleted(false)
+                }
+            });
+        })
     }, []);
 
     const handleJoyrideCallback = (data) => {
         const { action, status, type } = data;
 
         if (action === 'close' || status === 'finished') {
+            RequestUtils.post("/post_tutorial?user_id=" + user.uid + "&tutorial=" + 2).then((response) => {
+            });
             setJoyrideState((prevState) => ({
                 ...prevState,
                 run: false,
@@ -191,11 +225,11 @@ function Company() {
     }, [currentMessage]);
 
     const [joyrideState, setJoyrideState] = useState({
-        run: false,
+        run: !joyrideCompanyCompleted,
         steps: [
             {
                 target: ".lhs",
-                content: "On the left hand side, you can view a stock's chart and view other details about the stock.",
+                content: "On the left hand side, you can view up-to-date info about the stock.",
                 disableBeacon: true,
                 placement: 'right',
             },
@@ -206,7 +240,8 @@ function Company() {
             },
             {
                 target: ".message-input",
-                content: "You can also ask questions about the stock here and gradually gain a better understanding of the stock market!",
+                content: "You can also ask clarifying questions about the stock analysis here!",
+                placement: 'top',
             }
         ]
     });
@@ -252,7 +287,7 @@ function Company() {
                             }}
                         >
                             <Row style={{ width: "100%", display: "flex", justifyContent: "center", height: "79vh" }}>
-                                    <Col classname="lhs" span={10} style={{
+                                    <Col className="lhs" span={10} style={{
                                         backgroundColor: 'white',
                                         borderRadius: 8,
                                         height: '100%',
@@ -334,7 +369,7 @@ function Company() {
                                             ))}
 
                                             {analysis.length == 0 || messageHistory.length % 2 === 0 ? 
-                                            <div class="beep-boop">
+                                            <div className="beep-boop">
                                                 <Typewriter
                                                     options={{
                                                         strings: ['Beep boop beep boop, generating...'],
@@ -364,17 +399,18 @@ function Company() {
                     </Layout>
                 </Content>
             </Layout >
-            <Joyride steps={joyrideState.steps}
+            {!joyrideCompanyCompleted ? <Joyride steps={joyrideState.steps}
                 continuous={true}
                 showProgress={true}
                 showSkipButton={true}
+                callback={handleJoyrideCallback}
                 run={joyrideState.run}
                 styles={{
                     options: {
                         primaryColor: "#033d03",
                     }
                 }}
-            />
+            /> : <></>}
         </ConfigProvider >
 
     );
