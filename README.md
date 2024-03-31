@@ -1,5 +1,5 @@
 # Finsight 📈
-## Your AI finance bro
+## Your AI finance bro, Finn
 
 <img src="https://github.com/charlestang06/finsight/blob/main/finsightBanner.png?raw=true" />
 
@@ -10,8 +10,6 @@ Finsight is a RAG (retrieval augmented generation) AI app that helps new investo
 ## Our Process 
 
 We were motivated by the difficulty of learning more about the stock and financial markets, as they are taking a bigger role in our day-to-day wealth management lives. So, we determined a need for an educational platform to help new investors understand what the financial market looks like daily and provide critical insights on investments. As a result, Finsense came to be. We spent the first few hours planning our idea, including developing our unique “RAG” pipeline from data sources like Yahoo Finance to LLMs to the user interface with LangChain wrappers. We also sketched our idea on a whiteboard while researching similar designs: Yahoo Finance, Robinhood, Motley Fools, etc.
-
-This was the second time most of our team members had developed with ReactJS and Firebase, so working with these web technologies was challenging, especially with passing data between components. Our team learned a lot about teamwork and communication, especially using GitHub as a centralized platform for code management (merge conflicts!). Furthermore, we learned a lot about the ideation process and how to plan for software with many moving parts (components, working with LLMs, API development, etc). 
 
 ## Current Features
 
