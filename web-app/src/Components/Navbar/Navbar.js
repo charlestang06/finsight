@@ -61,6 +61,7 @@ function Navbar(props) {
                 display: "flex",
                 alignItems: "center",
                 backgroundColor: "white",
+                height: "10vh",
             }}
         >
             <div className="logo-container" onClick={() => navigate("/dashboard")}>

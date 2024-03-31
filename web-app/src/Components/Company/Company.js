@@ -13,10 +13,13 @@ import {
     Select,
     Button,
     Space,
+    Skeleton,
 } from "antd";
 import { HomeOutlined, PlusOutlined, SendOutlined } from "@ant-design/icons";
 import Meta from "antd/es/card/Meta.js";
 import Markdown from 'react-markdown';
+import Typewriter from 'typewriter-effect';
+import AIWriter from "react-aiwriter";
 
 import React, { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -55,10 +58,10 @@ function Company() {
         This document talks about **finance** and **technology**. 
     `;
     const [days, setDays] = useState(1); // 1, 7, 30, 90, 365
-    const [analysis, setAnalysis] = useState(markdownText);
+    const [analysis, setAnalysis] = useState("");
     const [messageHistory, setMessageHistory] = useState([]);
     const [currentMessage, setCurrentMessage] = useState("");
-    
+    const [typing, setTyping] = useState(0);
 
     useEffect(() => {
         RequestUtils.get("/company/" + id).then((response) => {
@@ -69,6 +72,9 @@ function Company() {
     }, []);
 
     useEffect(() => {
+        setAnalysis("");
+        setTyping(0);
+        setMessageHistory([]);
         RequestUtils.get("/get?ticker=" + id + "&length=" + days).then((response) => {
             response.json().then((data) => {
                 setAnalysis(data.response);
@@ -89,6 +95,22 @@ function Company() {
 
     const { TabPane } = Tabs;
 
+    useEffect(() => {
+        if (typing >= 0) {
+            let intervalId = setInterval(function() {
+                const typeRef = document.querySelector(".typing-reference");
+                const typeBot = document.querySelector(".message-bot");
+                if (typeRef && 
+                    typeBot &&
+                    typeRef.innerHTML.substring(0, typeRef.innerHTML.length) === typeBot.innerHTML.substring(0, typeRef.innerHTML.length)) {
+                    setTyping(-1);
+                    console.log("finished")
+                    clearInterval(intervalId);
+                }
+            }, 500);
+         }
+    }, [typing]);
+
     function askQuestion(e) {
         e.stopPropagation();
         let message = currentMessage;
@@ -96,6 +118,7 @@ function Company() {
         RequestUtils.get("/getChat?ticker=" + id + "&length=" + days + "&query=" + message).then((response) => {
             response.json().then((data) => {
                 setMessageHistory([...messageHistory, { message: message, sender: "user" }, { message: data.response, sender: "bot" }]);
+                setTyping(messageHistory.length-1);
             });
         });
         setCurrentMessage("");
@@ -117,12 +140,14 @@ function Company() {
                         backgroundColor: "#f5f5f5",
                         display: "flex",
                         justifyContent: "center",
+                        width: "100%",
                     }}
-                    className="mx-auto"
+                    className=""
                 >
                     <Layout
                         style={{
                             padding: "24px 40px 24px",
+                            width: "100%",
                         }}
                     >
                         <Content
@@ -133,14 +158,15 @@ function Company() {
                                 justifyContent: "center",
                                 height: "100%",
                                 margin: 0,
+                                width: "100%",
                             }}
                         >
-                            <Row style={{ width: "100%", display: "flex" }}>
-                                <Col span={11} style={{
+                            <Row style={{ width: "100%", display: "flex", justifyContent: "center", maxHeight: "79vh" }}>
+                                <Col span={10} style={{
                                     backgroundColor: 'white',
                                     borderRadius: 8,
                                     padding: 20,
-                                    height: '80%',
+                                    height: '100%',
                                     marginRight: 28,
                                     overflow: 'auto'
                                 }}>
@@ -149,7 +175,7 @@ function Company() {
                                     <FinInfo ticker={id} />
                                 </Col>
 
-                                <Col span={12} style={{ backgroundColor: 'white', borderRadius: 8, padding: 20, height: '80%' }}>
+                                <Col span={12} style={{ backgroundColor: 'white', borderRadius: 8, padding: 20, height: '100%' }}>
                                     <h1 style={{ margin: "0 0 16px" }}>
                                         Your
                                         <Select
@@ -181,18 +207,39 @@ function Company() {
                                                 fontSize: "17px",
                                             }}
                                         >
-                                            {messageHistory.map((message) => (
-                                                <Markdown className="message">
-                                                    {message.message}
-                                                </Markdown>
+
+                                            {messageHistory.map((message, index) => (
+                                                <div key={index} className={message.sender === "bot" ? "message-bot" : "message-user"}>
+                                                    {typing === index ? 
+
+                                                    <>
+                                                        <AIWriter className="message-bot">
+                                                            <Markdown>{message.message}</Markdown>
+                                                        </AIWriter> 
+                                                        <div style={{display: "none"}}>
+                                                            <Markdown className="typing-reference">{message.message}</Markdown>
+                                                        </div>
+                                                    </>
+                                                    :
+                                                    <Markdown>{message.message}</Markdown>
+                                                    }
+                                                </div>
                                             ))}
+
+                                            {messageHistory.length % 2 === 0 ? <Typewriter
+                                                options={{
+                                                    strings: ['...'],
+                                                    autoStart: true,
+                                                    loop: true,
+                                                    }}
+                                                /> : <></>}
                                         </div>
                                     </div>
                                     <div className="message-input" style={{ marginTop: 16, display: "flex", gap: "0.5rem" }}>
-                                        <TextArea autoSize className="ask-box" value={currentMessage} onChange={(e) => setCurrentMessage(e.target.value)} placeholder="Ask a clarifying question..." style={{ fontSize: '16px' }} />
-                                        <Button type="primary" onClick={(e) => { askQuestion(e) }}
+                                        <TextArea autoSize className="ask-box" value={currentMessage} onChange={(e) => setCurrentMessage(e.target.value)} disabled={typing >= 0 || messageHistory.length % 2 == 0} placeholder="Ask a clarifying question..." style={{ fontSize: '16px' }} />
+                                        <Button type="primary"  disabled={typing >= 0 || messageHistory.length % 2 == 0} onClick={(e) => { askQuestion(e) }}
                                             onKeyDown={(e) => {
-                                                if (e.key === 'Enter') askQuestion(e)
+                                                if (e.key === 'Enter' && !(typing >= 0 || messageHistory.length % 2 == 0)) askQuestion(e)
                                             }}>
                                             <SendOutlined />
                                         </Button>
