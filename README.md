@@ -1,5 +1,5 @@
 # Finsight 📈
-## Your AI finance bro
+## Your AI finance bro, Finn
 
 <img src="https://github.com/charlestang06/finsight/blob/main/finsightBanner.png?raw=true" />
 
