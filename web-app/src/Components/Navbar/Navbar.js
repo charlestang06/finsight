@@ -72,7 +72,7 @@ function Navbar(props) {
 
             <div className="right-buttons">
                 <Form onFinish={sendFavorite} style={{ marginRight: "1rem" }}>
-                    <Form.Item>
+                    <Form.Item className="favorite-input">
                         <Input size="large" placeholder="Add to favorites"
                             style={{ marginRight: "1rem", marginTop: 0 }}
                             prefix={<HeartOutlined />} value={addFavorite}

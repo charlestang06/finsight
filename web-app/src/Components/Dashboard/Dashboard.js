@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState, setState } from "react";
 import { useNavigate } from "react-router";
 import { useAuthState } from "react-firebase-hooks/auth";
 
@@ -12,6 +12,7 @@ import MiniChart from "../TradingChart/MiniChart.jsx";
 import "./Dashboard.css";
 import RequestUtils from "../../Utils/RequestUtils";
 import Typewriter from "typewriter-effect";
+import Joyride from 'react-joyride';
 
 import {
     Row,
@@ -43,7 +44,6 @@ function Dashboard() {
     const [favorites, setFavorites] = useState([]);
     const [id, setId] = useState(0);
 
-
     useEffect(() => {
         if (user) {
             setId(user.uid);
@@ -58,6 +58,23 @@ function Dashboard() {
 
     const { Content } = Layout;
 
+    const steps = [
+        {
+            target: "html",
+            content: "Welcome to Finsights! This is your dashboard where you can view your favorite stocks.",
+            disableBeacon: true,
+            placement: 'center'
+        },
+        {
+            target: ".favorite-input",
+            content: "Add a stock to your favorites by typing in the ticker symbol and pressing enter (e.g. AAPL).",
+        },
+        {
+            target: ".favorite-section",
+            content: "Once you have a stock in your favorites, it will display here. Click on it to learn more about that stock and advice on investing.",
+        }
+    ]
+
     return (
         <>
             <ConfigProvider
@@ -67,9 +84,11 @@ function Dashboard() {
             >
                 <Layout className="white">
                     <Navbar tab={"2"} />
-                    <Regex />
-                    <Content className="mx-auto text-center" style={{  textAlign: "center", alignContent: "center" }}>
-                        <h1 style={{ fontSize: "2.5rem" }}>
+                    {/* <Regex /> */}
+                    <Content className="mx-auto text-center" style={{ textAlign: "center", alignContent: "center" }}>
+                        <h1 style={{ fontSize: "2.5rem" }}
+                            className="typewriter"
+                        >
                             <Typewriter
                                 onInit={(typewriter) => {
                                     typewriter
@@ -90,14 +109,21 @@ function Dashboard() {
                             />
                         </h1>
 
-                        <Row gutter={[8, 8]} justify="center">
-                            {favorites.map((company) => (
-                                <CompanyCard key={favorites.indexOf(company)} ticker={company} navigate={navigate} />
-                            ))}
+                        <Row gutter={[8, 8]} justify="center" className="favorite-section">
+                            <div >
+                                {favorites.map((company) => (
+                                    <CompanyCard key={favorites.indexOf(company)} ticker={company} navigate={navigate} />
+                                ))}
+                            </div>
                         </Row>
                     </Content>
                 </Layout>
             </ConfigProvider>
+            <Joyride steps={steps}
+                continuous={true}
+                showProgress={true}
+                showSkipButton={true}
+            />
         </>
     );
 }

@@ -30,6 +30,8 @@ import "./Company.css";
 import RequestUtils from "../../Utils/RequestUtils";
 import MediumChart from "../TradingChart/MediumChart";
 import FinInfo from "../TradingChart/FinInfo";
+import Joyride from 'react-joyride';
+
 
 const { Content } = Layout;
 const { TextArea } = Input;
@@ -97,7 +99,7 @@ function Company() {
 
     useEffect(() => {
         if (typing >= 0) {
-            let intervalId = setInterval(function() {
+            let intervalId = setInterval(function () {
                 const typeRef = document.querySelector(".typing-reference");
                 const typeBots = document.querySelectorAll(".message-bot");
                 const typeBot = typeBots[typeBots.length - 1];
@@ -105,7 +107,7 @@ function Company() {
                     // console.log(typeRef.innerHTML)
                     console.log(typeBot.innerHTML)
                 }
-                if (typeRef && 
+                if (typeRef &&
                     typeBot &&
                     typeBot.innerHTML &&
                     typeBot.innerHTML.includes(typeRef.innerHTML)) {
@@ -113,7 +115,7 @@ function Company() {
                     clearInterval(intervalId);
                 }
             }, 500);
-         }
+        }
     }, [typing]);
 
     function askQuestion(e) {
@@ -122,12 +124,30 @@ function Company() {
         setMessageHistory([...messageHistory, { message: message, sender: "user" }]);
         RequestUtils.get("/getChat?ticker=" + id + "&length=" + days + "&query=" + message).then((response) => {
             response.json().then((data) => {
-                setTyping(messageHistory.length+1);
+                setTyping(messageHistory.length + 1);
                 setMessageHistory([...messageHistory, { message: message, sender: "user" }, { message: data.response, sender: "bot" }]);
             });
         });
         setCurrentMessage("");
     }
+
+    const steps = [
+        {
+            target: ".lhs",
+            content: "On this page, you can view a stock's chart and view other details about the stock.",
+            disableBeacon: true,
+            placement: 'right',
+        },
+        {
+            target: ".rhs",
+            content: "You can read about review on this stock, such as performance in the past and future recommendations on investing for the future. Sort by daily, weekly, monthly, quarterly, or yearly reports to see the stock's performance over time.",
+            placemenet: 'left',
+        },
+        {
+            target: ".message-input",
+            content: "You can also ask questions about the stock here and gradually gain a better understanding of the stock market!",
+        }
+    ]
 
     // RENDER
     return (
@@ -138,6 +158,7 @@ function Company() {
                 },
             }}
         >
+
             <Layout>
                 <Navbar tab={"2"} />
                 <Content
@@ -167,7 +188,7 @@ function Company() {
                             }}
                         >
                             <Row style={{ width: "100%", display: "flex", justifyContent: "center", maxHeight: "79vh" }}>
-                                <Col span={10} style={{
+                                <Col className="lhs" span={10} style={{
                                     backgroundColor: 'white',
                                     borderRadius: 8,
                                     padding: 20,
@@ -180,8 +201,8 @@ function Company() {
                                     <FinInfo ticker={id} />
                                 </Col>
 
-                                <Col span={12} style={{ backgroundColor: 'white', borderRadius: 8, padding: 20, height: '100%' }}>
-                                    <h1 style={{ margin: "0 0 16px" }}>
+                                <Col className="rhs" span={12} style={{ backgroundColor: 'white', borderRadius: 8, padding: 20, height: '100%' }}>
+                                    <h1 className="rhs-title" style={{ margin: "0 0 16px" }}>
                                         Your
                                         <Select
                                             defaultValue="1"
@@ -215,18 +236,18 @@ function Company() {
 
                                             {messageHistory.map((message, index) => (
                                                 <div key={index} className={message.sender === "bot" ? "message-bot" : "message-user"}>
-                                                    {typing === index ? 
+                                                    {typing === index ?
 
-                                                    <>
-                                                        <AIWriter className="message-bot">
-                                                            <Markdown>{message.message}</Markdown>
-                                                        </AIWriter> 
-                                                        <div style={{display: "none"}}>
-                                                            <Markdown className="typing-reference">{message.message}</Markdown>
-                                                        </div>
-                                                    </>
-                                                    :
-                                                    <Markdown>{message.message}</Markdown>
+                                                        <>
+                                                            <AIWriter className="message-bot">
+                                                                <Markdown>{message.message}</Markdown>
+                                                            </AIWriter>
+                                                            <div style={{ display: "none" }}>
+                                                                <Markdown className="typing-reference">{message.message}</Markdown>
+                                                            </div>
+                                                        </>
+                                                        :
+                                                        <Markdown>{message.message}</Markdown>
                                                     }
                                                 </div>
                                             ))}
@@ -236,13 +257,13 @@ function Company() {
                                                     strings: ['...'],
                                                     autoStart: true,
                                                     loop: true,
-                                                    }}
-                                                /> : <></>}
+                                                }}
+                                            /> : <></>}
                                         </div>
                                     </div>
                                     <div className="message-input" style={{ marginTop: 16, display: "flex", gap: "0.5rem" }}>
                                         <TextArea autoSize className="ask-box" value={currentMessage} onChange={(e) => setCurrentMessage(e.target.value)} disabled={typing >= 0 || messageHistory.length % 2 == 0} placeholder="Ask a clarifying question..." style={{ fontSize: '16px' }} />
-                                        <Button type="primary"  disabled={typing >= 0 || messageHistory.length % 2 == 0} onClick={(e) => { askQuestion(e) }}
+                                        <Button type="primary" disabled={typing >= 0 || messageHistory.length % 2 == 0} onClick={(e) => { askQuestion(e) }}
                                             onKeyDown={(e) => {
                                                 if (e.key === 'Enter' && !(typing >= 0 || messageHistory.length % 2 == 0)) askQuestion(e)
                                             }}>
@@ -256,6 +277,11 @@ function Company() {
 
                 </Content>
             </Layout >
+            <Joyride steps={steps}
+                continuous={true}
+                showProgress={true}
+                showSkipButton={true}
+            />
         </ConfigProvider >
 
     );
