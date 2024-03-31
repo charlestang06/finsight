@@ -2,7 +2,6 @@ import React, { useEffect, useRef } from 'react';
 
 function MiniChart({ ticker }) {
     const container = useRef();
-    const scriptLoaded = useRef(false);
 
     useEffect(() => {
         const script = document.createElement("script");

@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import Meta from "antd/es/card/Meta.js";
 import MiniChart from "../TradingChart/MiniChart.jsx";
 
-const CompanyCard = ({ company }) => {
+const CompanyCard = ({ ticker }) => {
     let navigate = useNavigate();
 
     return (
@@ -13,10 +13,10 @@ const CompanyCard = ({ company }) => {
             style={{ width: 300, margin: "1rem", }}
             className="card1, glow"
             onClick={() => {
-                navigate("/companies/" + company.ticker);
+                navigate("/companies/" + ticker);
             }}
         >
-            <MiniChart ticker={company.ticker} />
+            <MiniChart ticker={ticker} />
         </Card>
     );
 };

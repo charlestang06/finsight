@@ -1,32 +1,20 @@
-
-
-
 // TradingViewWidget.jsx
 import React, { useEffect, useRef, memo } from 'react';
 
-function TradingViewWidget() {
+function MediumChart() {
     const container = useRef();
 
-    useEffect(
-        () => {
-            const script = document.createElement("script");
-            script.src = "https://s3.tradingview.com/external-embedding/embed-widget-symbol-overview.js";
-            script.type = "text/javascript";
-            script.async = true;
-            script.innerHTML = `
+    useEffect(() => {
+        const script = document.createElement("script");
+        script.src = "https://s3.tradingview.com/external-embedding/embed-widget-symbol-overview.js";
+        script.type = "text/javascript";
+        script.async = true;
+        script.innerHTML = `
         {
           "symbols": [
             [
               "Apple",
               "AAPL|1D"
-            ],
-            [
-              "Google",
-              "GOOGL|1D"
-            ],
-            [
-              "Microsoft",
-              "MSFT|1D"
             ]
           ],
           "chartOnly": false,
@@ -62,17 +50,20 @@ function TradingViewWidget() {
             "all|1M"
           ]
         }`;
+        container.current.appendChild(script);
+        if (container.current.firstChild) {
+            container.current.removeChild(container.current.firstChild);
+        }
+        else {
             container.current.appendChild(script);
-        },
-        []
-    );
+        }
+    }, []);
 
     return (
         <div className="tradingview-widget-container" ref={container}>
             <div className="tradingview-widget-container__widget"></div>
-            <div className="tradingview-widget-copyright"><a href="https://www.tradingview.com/" rel="noopener nofollow" target="_blank"><span className="blue-text">Track all markets on TradingView</span></a></div>
         </div>
     );
 }
 
-export default memo(TradingViewWidget);
+export default memo(MediumChart);

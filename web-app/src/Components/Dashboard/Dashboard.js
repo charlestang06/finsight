@@ -9,11 +9,11 @@ import CompanyCard from "../CompanyCard/CompanyCard.js";
 import { auth } from "../../Firebase.js";
 import dummyFavorites from "./dummyFavorites.js"; // Import the dummy data
 import MiniChart from "../TradingChart/MiniChart.jsx";
-
-
 import "./Dashboard.css";
+import RequestUtils from "../../Utils/RequestUtils";
 
 import {
+    Row,
     Card,
     ConfigProvider,
     Layout,
@@ -31,7 +31,6 @@ function Dashboard() {
 
     let navigate = useNavigate();
 
-
     // TODO: this doesn't work, fix redirect
     useEffect(() => {
         if ((!user && !loading)) {
@@ -44,8 +43,28 @@ function Dashboard() {
 
 
     useEffect(() => {
-        setFavorites(dummyFavorites);
-    }, [id]);
+        if (user) {
+            setId(user.uid);
+        }
+        RequestUtils.get("/get_favorites/" + user.uid).then((response) => {
+            response.json().then((data) => {
+                setFavorites(data);
+                // data.forEach((ticker, index) => {
+                //     RequestUtils.get("/company/" + ticker).then((response) => {
+                //         response.json().then(
+                //             (companyData) => {
+                //                 setFavorites(prevFavorites => [
+                //                     ...prevFavorites,
+                //                     { "name": companyData["name"], "ticker": ticker, "id": index }
+                //                 ]);
+                //             }
+                //         );
+                //     });
+                // });
+            });
+        });
+    }, [user]);
+
 
     const { Content } = Layout;
 
@@ -58,16 +77,14 @@ function Dashboard() {
             >
                 <Layout className="">
                     <Navbar tab={"2"} />
-                    <Content className="mx-auto" style={{ overflowY: 'auto', maxHeight: 'calc(100vh - 64px)' }}>
+                    <Content className="mx-auto text-center"> {/* Add 'text-center' class for center alignment */}
                         <h1>Welcome back, user!</h1>
-                        <div>
-                            <h2>
-                                Favorites
-                            </h2>
+                        <h1>Your favorite companies</h1>
+                        <Row gutter={[16, 16]} justify="center"> {/* Add 'justify="center"' for center alignment */}
                             {favorites.map((company) => (
-                                <CompanyCard key={company.id} company={company} navigate={navigate} />
+                                <CompanyCard key={favorites.indexOf(company)} ticker={company} navigate={navigate} />
                             ))}
-                        </div>
+                        </Row>
                     </Content>
                 </Layout>
             </ConfigProvider>
