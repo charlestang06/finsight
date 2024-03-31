@@ -53,6 +53,10 @@ function Company() {
         marketCap: 0,
         links: [],
     });
+    const markdownText = `
+        # This is a Markdown document
+        This document talks about **finance** and **technology**. 
+    `;
     const [days, setDays] = useState(1); // 1, 7, 30, 90, 365
     const [analysis, setAnalysis] = useState("");
     const [messageHistory, setMessageHistory] = useState([]);
@@ -95,12 +99,17 @@ function Company() {
         if (typing >= 0) {
             let intervalId = setInterval(function() {
                 const typeRef = document.querySelector(".typing-reference");
-                const typeBot = document.querySelector(".message-bot");
+                const typeBots = document.querySelectorAll(".message-bot");
+                const typeBot = typeBots[typeBots.length - 1];
+                if (typeRef && typeBot) {
+                    // console.log(typeRef.innerHTML)
+                    console.log(typeBot.innerHTML)
+                }
                 if (typeRef && 
                     typeBot &&
-                    typeRef.innerHTML.substring(0, typeRef.innerHTML.length) === typeBot.innerHTML.substring(0, typeRef.innerHTML.length)) {
+                    typeBot.innerHTML &&
+                    typeBot.innerHTML.includes(typeRef.innerHTML)) {
                     setTyping(-1);
-                    console.log("finished")
                     clearInterval(intervalId);
                 }
             }, 500);
@@ -113,8 +122,8 @@ function Company() {
         setMessageHistory([...messageHistory, { message: message, sender: "user" }]);
         RequestUtils.get("/getChat?ticker=" + id + "&length=" + days + "&query=" + message).then((response) => {
             response.json().then((data) => {
+                setTyping(messageHistory.length+1);
                 setMessageHistory([...messageHistory, { message: message, sender: "user" }, { message: data.response, sender: "bot" }]);
-                setTyping(messageHistory.length-1);
             });
         });
         setCurrentMessage("");
