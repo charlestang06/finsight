@@ -60,7 +60,6 @@ function Dashboard() {
 
 
     const { Content } = Layout;
-
     const [joyrideState, setJoyrideState] = useState({
         run: localStorage.getItem('joyrideCompleted') === 'true',
         steps: [
@@ -140,10 +139,10 @@ function Dashboard() {
                                 }}
                             /> </h1>
 
-                        <h2 style={{  color: "grey", fontSize: "2rem", fontWeight: "light", paddingBottom: "2rem" }} className="typewriter">
-                        😎 Your AI finance bro 😎
+                        <h2 style={{ color: "grey", fontSize: "2rem", fontWeight: "light", paddingBottom: "2rem" }} className="typewriter">
+                            😎 Your AI finance bro 😎
                         </h2>
-                        <img id="box" src={RocketImg} width={200} alt="rocket" style={{float: "left", marginTop:"-1rem", marginLeft: "2rem"}}></img>
+                        <img id="box" src={RocketImg} width={200} alt="rocket" style={{ float: "left", marginTop: "-1rem", marginLeft: "2rem" }}></img>
                         <h1 style={{ fontSize: "4rem", marginTop: "6rem", paddingBottom: "4rem" }}>
                             <a href="#favorites" style={{ color: "black" }}><DownOutlined className="floating" /></a>
                         </h1>
@@ -159,6 +158,7 @@ function Dashboard() {
                 </Layout>
             </ConfigProvider>
             <Joyride
+                run={joyrideState.run && !joyrideCompleted}
                 steps={joyrideState.steps}
                 callback={handleJoyrideCallback}
                 continuous={true}
