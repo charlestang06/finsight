@@ -135,12 +135,14 @@ function Company() {
                             }}
                         >
                             <Row style={{ width: "100%", display: "flex" }}>
-                                <Col span={11} style={{ marginRight: "36px" }} >
+                                <Col span={11} style={{ border: '2px #cccccc solid', borderRadius: 8, padding: 20, height: '80%' }} >
                                     <MediumChart ticker={id} />
                                 </Col>
 
-                                <Col span={12}>
-                                    <h1 style={{ margin: "0 0 0" }}>
+                                <Col span={1}></Col>
+
+                                <Col span={12} style={{ border: '2px #cccccc solid', borderRadius: 8, padding: 20, height: '80%' }}>
+                                    <h1 style={{ margin: "0 0 16px" }}>
                                         Your
                                         <Select
                                             defaultValue="1"
@@ -160,7 +162,7 @@ function Company() {
                                         Report
                                     </h1>
 
-                                    <div style={{ height: '100%' }}>
+                                    <div className="message-container" style={{ height: 'calc(100% - 105px)', overflow: 'auto' }}>
                                         <div className="message-history"
                                             style={{
                                                 display: "flex",
@@ -168,19 +170,24 @@ function Company() {
                                                 gap: "1rem",
                                                 marginBottom: "1rem",
                                                 overflowY: "auto",
+                                                fontSize: "17px",
                                             }}
                                         >
                                             {messageHistory.map((message) => (
                                                 <Markdown className="message">
-                                                    {/* <span style={{fontWeight: "bold"}}>{message.sender}: </span> */}
                                                     {message.message}
                                                 </Markdown>
                                             ))}
                                         </div>
-                                        <div className="message-input" style={{ display: "flex", gap: "1rem" }}>
-                                            <TextArea autoSize className="ask-box" value={currentMessage} onChange={(e) => setCurrentMessage(e.target.value)} placeholder="Ask a clarifying question..." />
-                                            <Button type="primary" onClick={(e) => { askQuestion(e) }}><SendOutlined /></Button>
-                                        </div>
+                                    </div>
+                                    <div className="message-input" style={{ marginTop: 16, display: "flex", gap: "0.5rem" }}>
+                                        <TextArea autoSize className="ask-box" value={currentMessage} onChange={(e) => setCurrentMessage(e.target.value)} placeholder="Ask a clarifying question..." style={{ fontSize: '16px' }} />
+                                        <Button type="primary" onClick={(e) => { askQuestion(e) }}
+                                            onKeyDown={(e) => {
+                                                if (e.key === 'Enter') askQuestion(e)
+                                            }}>
+                                            <SendOutlined />
+                                        </Button>
                                     </div>
                                 </Col>
                             </Row>
