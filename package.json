@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "react-tooltip": "^5.26.3",
+    "rehype-raw": "^7.0.0"
+  }
+}

@@ -22,6 +22,7 @@ import {
     theme,
 } from "antd";
 import Meta from "antd/es/card/Meta.js";
+import Regex from "../regex.js"
 
 
 function Dashboard() {
