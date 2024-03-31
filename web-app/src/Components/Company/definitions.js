@@ -8,7 +8,7 @@ const definitions = {
     "Beta": "Measure of a stock's volatility compared to market",
     "Volatility": "Degree of variation in trading price of a security",
     "Liquidity": "Ease of converting an asset to cash without loss",
-    "Net Asset Value (NAV)": "Value of a fund's assets minus liabilities",
+    "Net Asset Value": "Value of a fund's assets minus liabilities",
     "NAV": "Value of a fund's assets minus liabilities",
     "Book Value": "Value of a company's assets minus liabilities",
     "Debt-to-Equity Ratio": "Proportion of debt to equity in a company",

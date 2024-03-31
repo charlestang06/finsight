@@ -13,8 +13,13 @@ import {
     Select,
     Button,
     Space,
+    Drawer,
+    Typography,
     Skeleton,
 } from "antd";
+import {
+    InfoCircleOutlined,
+} from "@ant-design/icons";
 import { HomeOutlined, PlusOutlined, SendOutlined } from "@ant-design/icons";
 import Meta from "antd/es/card/Meta.js";
 import Markdown from 'react-markdown';
@@ -32,6 +37,9 @@ import MediumChart from "../TradingChart/MediumChart";
 import FinInfo from "../TradingChart/FinInfo";
 import Joyride from 'react-joyride';
 
+import DefinitionDrawer from "./DefinitionDrawer";
+import MessageComponent from "./MessageComponent";
+import definitions from "./definitions.js";
 
 const { Content } = Layout;
 const { TextArea } = Input;
@@ -63,7 +71,10 @@ function Company() {
     const [analysis, setAnalysis] = useState("");
     const [messageHistory, setMessageHistory] = useState([]);
     const [currentMessage, setCurrentMessage] = useState("");
+    const [terms, setTerms] = useState({});
+    const [openDrawer, setOpenDrawer] = useState(false);
     const [typing, setTyping] = useState(0);
+
 
     useEffect(() => {
         RequestUtils.get("/company/" + id).then((response) => {
@@ -87,6 +98,22 @@ function Company() {
     useEffect(() => {
         setMessageHistory([{ message: analysis, sender: "bot" }]);
     }, [analysis]);
+
+    useEffect(() => {
+        let newTerms = {};
+        if (messageHistory.length === 0 || messageHistory[0].message === "") return;
+
+        for (let i = 0; i < messageHistory.length; i++) {
+            const message = messageHistory[i].message.toLowerCase(); // Access the message here
+            for (let term in definitions) {
+                if (message.indexOf(term.toLowerCase()) >= 0) {
+                    newTerms[term] = definitions[term];
+                }
+            }
+        }
+        setTerms(newTerms);
+    }, [messageHistory]);
+
 
     // CHECK USERIMPL FOR USER
     useEffect(() => {
@@ -154,11 +181,12 @@ function Company() {
         <ConfigProvider
             theme={{
                 token: {
-                    colorPrimary: "#7E70CC",
+                    colorPrimary: "#033D03", colorBgBase: "#FDF7F2", colorBgContainer: "white"
                 },
             }}
         >
-
+            <DefinitionDrawer openDrawer={openDrawer} setOpenDrawer={setOpenDrawer}
+                terms={terms}></DefinitionDrawer>
             <Layout>
                 <Navbar tab={"2"} />
                 <Content
@@ -202,6 +230,7 @@ function Company() {
                                 </Col>
 
                                 <Col className="rhs" span={12} style={{ backgroundColor: 'white', borderRadius: 8, padding: 20, height: '100%' }}>
+                                    <div style={{display: "flex"}}>
                                     <h1 className="rhs-title" style={{ margin: "0 0 16px" }}>
                                         Your
                                         <Select
@@ -221,6 +250,10 @@ function Company() {
                                         />
                                         Report
                                     </h1>
+                                    <Button style={{marginLeft: "auto", border: "0"}} onClick={() => {setOpenDrawer(true)}}>
+                                        <InfoCircleOutlined style={{color: "black", fontSize: "2.5rem"}}/>
+                                    </Button>
+                                    </div>
 
                                     <div className="message-container" style={{ height: 'calc(100% - 105px)', overflow: 'auto', lineHeight: "1.6em", margin: "0 8px" }}>
                                         <div className="message-history"
@@ -252,13 +285,15 @@ function Company() {
                                                 </div>
                                             ))}
 
-                                            {messageHistory.length % 2 === 0 ? <Typewriter
+                                            {analysis.length == 0 || messageHistory.length % 2 === 0 ? <Typewriter
                                                 options={{
-                                                    strings: ['...'],
+                                                    strings: ['Beep boop beep boop, generating...'],
                                                     autoStart: true,
                                                     loop: true,
-                                                }}
-                                            /> : <></>}
+                                                    delay: 50,
+                                                    deleteSpeed: 0,
+                                                    }}
+                                                /> : <></>}
                                         </div>
                                     </div>
                                     <div className="message-input" style={{ marginTop: 16, display: "flex", gap: "0.5rem" }}>
@@ -274,7 +309,6 @@ function Company() {
                             </Row>
                         </Content>
                     </Layout>
-
                 </Content>
             </Layout >
             <Joyride steps={steps}

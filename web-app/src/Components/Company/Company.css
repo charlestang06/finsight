@@ -1,18 +1,25 @@
 .profile-card {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
-    padding: 20px;
-    overflow: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  padding: 20px;
+  overflow: auto;
 }
 
 .ant-select-selection {
-    background-color: green;
-  }
-
-h1 {
-    line-height: 1em;
+  background-color: green;
 }
-  
+
+.nobg {
+  background: none;
+  box-shadow: none;
+  border: none;
+  color: white;
+
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}

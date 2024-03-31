@@ -1,5 +1,10 @@
+html {
+  margin: 0;
+}
+
 body {
     overflow-x: hidden;
+    margin: 0;
   }
   .login {
     height: 100vh;

@@ -1,3 +1,11 @@
 h1 {
     font-family: 'Newsreader'
 }
+
+body {
+    margin: 0;
+}
+
+html{
+    scroll-behavior:smooth
+}

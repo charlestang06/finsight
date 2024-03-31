@@ -12,6 +12,7 @@ import MiniChart from "../TradingChart/MiniChart.jsx";
 import "./Dashboard.css";
 import RequestUtils from "../../Utils/RequestUtils";
 import Typewriter from "typewriter-effect";
+import { DownOutlined } from "@ant-design/icons";
 import Joyride from 'react-joyride';
 
 import {
@@ -79,16 +80,13 @@ function Dashboard() {
         <>
             <ConfigProvider
                 theme={{
-                    token: { colorPrimary: "#786AC9" },
+                    token: { colorPrimary: "#033D03", colorBgBase: "#FDF7F2", colorBgContainer: "white" },
                 }}
             >
-                <Layout className="white">
+                <Layout className="" style={{ paddingBottom: "6rem" }}>
                     <Navbar tab={"2"} />
-                    {/* <Regex /> */}
                     <Content className="mx-auto text-center" style={{ textAlign: "center", alignContent: "center" }}>
-                        <h1 style={{ fontSize: "2.5rem" }}
-                            className="typewriter"
-                        >
+                        <h1 style={{ fontSize: "4rem", paddingTop: "6rem", paddingBottom: "6rem" }} className="typewriter">
                             <Typewriter
                                 onInit={(typewriter) => {
                                     typewriter
@@ -106,9 +104,14 @@ function Dashboard() {
                                         .typeString("<i>finsights</i>")
                                         .start();
                                 }}
-                            />
+                            /> </h1>
+
+                        <h1 style={{ fontSize: "4rem", marginTop: "6rem", paddingBottom: "6rem" }}>
+                            <a href="#favorites" style={{ color: "black" }}><DownOutlined className="floating" /></a>
                         </h1>
 
+                        
+                        <h1 style={{fontSize: "3rem", paddingBottom: "1rem", paddingTop:"2rem"}} id="favorites">  Your favorite <i>finsights</i></h1>
                         <Row gutter={[8, 8]} justify="center" className="favorite-section">
                             <div >
                                 {favorites.map((company) => (
