@@ -69,6 +69,10 @@ function Company() {
     const [analysis, setAnalysis] = useState("");
     const [messageHistory, setMessageHistory] = useState([]);
     const [currentMessage, setCurrentMessage] = useState("");
+    const [terms, setTerms] = useState({});
+    const [openDrawer, setOpenDrawer] = useState(false);
+    const [typing, setTyping] = useState(0);
+
 
     useEffect(() => {
         RequestUtils.get("/company/" + id).then((response) => {
@@ -205,7 +209,7 @@ function Company() {
                                     <FinInfo ticker={id} />
                                 </Col>
 
-                                <Col span={12} style={{ backgroundColor: 'white', borderRadius: 8, padding: 20, height: '80%' }}>
+                                <Col span={12} style={{ backgroundColor: 'white', borderRadius: 8, padding: 20, height: '100%' }}>
                                     <h1 style={{ margin: "0 0 16px" }}>
                                         Your
                                         <Select
@@ -256,11 +260,13 @@ function Company() {
                                                 </div>
                                             ))}
 
-                                            {messageHistory.length % 2 === 0 ? <Typewriter
+                                            {analysis.length == 0 || messageHistory.length % 2 === 0 ? <Typewriter
                                                 options={{
-                                                    strings: ['...'],
+                                                    strings: ['Beep boop beep boop, generating...'],
                                                     autoStart: true,
                                                     loop: true,
+                                                    delay: 50,
+                                                    deleteSpeed: 0,
                                                     }}
                                                 /> : <></>}
                                         </div>

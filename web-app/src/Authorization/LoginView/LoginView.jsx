@@ -69,8 +69,8 @@ function LoginView(props) {
                     size="large"
                     onFinish={login}
                 >
-                    <p className="padded-text">
-                    Finsight bridges the gap between new investors and financial markets as your personal, AI finance bro.
+                    <p className="padded-text" style={{fontSize: "1.15rem", margin: "12px 0"}}>
+                    Your personal AI finance bro
                     </p>
                     {tab === 1 ?
                         <Form.Item
