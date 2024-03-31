@@ -14,7 +14,7 @@ import {
     Button,
     Space,
     Drawer,
-    Typography
+    Typography,
     Skeleton,
 } from "antd";
 import {
