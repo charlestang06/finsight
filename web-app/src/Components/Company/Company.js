@@ -210,6 +210,7 @@ function Company() {
                                 </Col>
 
                                 <Col span={12} style={{ backgroundColor: 'white', borderRadius: 8, padding: 20, height: '100%' }}>
+                                    <div style={{display: "flex"}}>
                                     <h1 style={{ margin: "0 0 16px" }}>
                                         Your
                                         <Select
@@ -229,6 +230,10 @@ function Company() {
                                         />
                                         Report
                                     </h1>
+                                    <Button style={{marginLeft: "auto", border: "0"}} onClick={() => {setOpenDrawer(true)}}>
+                                        <InfoCircleOutlined style={{color: "black", fontSize: "2.5rem"}}/>
+                                    </Button>
+                                    </div>
 
                                     <div className="message-container" style={{ height: 'calc(100% - 105px)', overflow: 'auto', lineHeight: "1.6em", margin: "0 8px" }}>
                                         <div className="message-history"
