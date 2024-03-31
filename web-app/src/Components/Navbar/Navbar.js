@@ -46,7 +46,7 @@ function Navbar(props) {
     const sendFavorite = () => {
         if (user) {
             if (tickers.includes(addFavorite) && !allFavorites.includes(addFavorite) && addFavorite !== "") {
-                RequestUtils.post("/post_favorites?user_id=" + user.uid, { "favorites": [...allFavorites, addFavorite] }).then((response) => {
+                RequestUtils.post("/post_favorites?user_id=" + user.uid, [...allFavorites, addFavorite]).then((response) => {
                     console.log(response);
                 });
                 setAddFavorite("");

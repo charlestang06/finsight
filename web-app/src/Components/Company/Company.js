@@ -75,6 +75,8 @@ function Company() {
     const [openDrawer, setOpenDrawer] = useState(false);
     const [typing, setTyping] = useState(0);
 
+    const [joyrideCompanyCompleted, setJoyrideCompanyCompleted] = useState(localStorage.getItem('joyrideCompanyCompleted') === 'true');
+
 
     useEffect(() => {
         RequestUtils.get("/company/" + id).then((response) => {
@@ -154,6 +156,19 @@ function Company() {
 
         return () => clearTimeout(timer);
     }, []);
+
+    const handleJoyrideCallback = (data) => {
+        const { action, status, type } = data;
+
+        if (action === 'close' || status === 'finished') {
+            setJoyrideState((prevState) => ({
+                ...prevState,
+                run: false,
+            }));
+            setJoyrideCompanyCompleted(true);
+            localStorage.setItem('joyrideCompanyCompleted', 'true');
+        }
+    }
 
     function askQuestion(e) {
         e.stopPropagation();
