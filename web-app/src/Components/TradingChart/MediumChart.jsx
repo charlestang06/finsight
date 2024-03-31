@@ -1,7 +1,7 @@
 // TradingViewWidget.jsx
 import React, { useEffect, useRef, memo } from 'react';
 
-function MediumChart() {
+function MediumChart({ticker}) {
     const container = useRef();
 
     useEffect(() => {
@@ -13,8 +13,7 @@ function MediumChart() {
         {
           "symbols": [
             [
-              "Apple",
-              "AAPL|1D"
+              "${ticker}|1D"
             ]
           ],
           "chartOnly": false,
@@ -22,7 +21,7 @@ function MediumChart() {
           "height": 400,
           "locale": "en",
           "colorTheme": "light",
-          "autosize": false,
+          "autosize": true,
           "showVolume": false,
           "showMA": false,
           "hideDateRanges": false,

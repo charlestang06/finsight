@@ -56,10 +56,10 @@ function Dashboard() {
             >
                 <Layout className="">
                     <Navbar tab={"2"} />
-                    <Content className="mx-auto text-center"> {/* Add 'text-center' class for center alignment */}
+                    <Content className="mx-auto text-center">
                         <h1>Welcome back, user!</h1>
                         <h1>Your favorite companies</h1>
-                        <Row gutter={[16, 16]} justify="center"> {/* Add 'justify="center"' for center alignment */}
+                        <Row gutter={[8, 8]} justify="center">
                             {favorites.map((company) => (
                                 <CompanyCard key={company.id} company={company} navigate={navigate} />
                             ))}
