@@ -50,10 +50,15 @@ function Company() {
         marketCap: 0,
         links: [],
     });
+    const markdownText = `
+        # This is a Markdown document
+        This document talks about **finance** and **technology**. 
+    `;
     const [days, setDays] = useState(1); // 1, 7, 30, 90, 365
-    const [analysis, setAnalysis] = useState("lorem ipsum dolor sit amet, consectetur adipiscing elit.");
+    const [analysis, setAnalysis] = useState(markdownText);
     const [messageHistory, setMessageHistory] = useState([]);
     const [currentMessage, setCurrentMessage] = useState("");
+    
 
     useEffect(() => {
         RequestUtils.get("/company/" + id).then((response) => {
