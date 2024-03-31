@@ -49,7 +49,6 @@ function MediumChart({ticker}) {
             "all|1M"
           ]
         }`;
-        container.current.appendChild(script);
         if (container.current.firstChild) {
             container.current.removeChild(container.current.firstChild);
         }
