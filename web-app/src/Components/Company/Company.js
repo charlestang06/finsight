@@ -115,7 +115,6 @@ function Company() {
         setTerms(newTerms);
     }, [messageHistory]);
 
-
     // CHECK USERIMPL FOR USER
     useEffect(() => {
         if (userImpl == UNAUTHORIZED) {
@@ -146,7 +145,17 @@ function Company() {
             }, 300);
         }
     }, [typing]);
-    
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setJoyrideState((prevState) => ({
+                ...prevState,
+                run: true,
+            }));
+        }, 1300);
+
+        return () => clearTimeout(timer);
+    }, []);
 
     function askQuestion(e) {
         e.stopPropagation();
@@ -165,23 +174,26 @@ function Company() {
         if (document.querySelector(".beep-boop")) document.querySelector(".beep-boop").scrollIntoView(false);
     }, [currentMessage]);
 
-    const steps = [
-        {
-            target: ".lhs",
-            content: "On the left hand side, you can view a stock's chart and view other details about the stock.",
-            disableBeacon: true,
-            placement: 'right',
-        },
-        {
-            target: ".rhs",
-            content: "The right hand side displays the RAG-powered LLM analysis of the stock. Sort by daily, weekly, monthly, quarterly, or yearly reports to see the stock's performance over time. Click on the info icon to view relevant definitions.",
-            placemenet: 'left',
-        },
-        {
-            target: ".message-input",
-            content: "You can also ask questions about the stock here and gradually gain a better understanding of the stock market!",
-        }
-    ]
+    const [joyrideState, setJoyrideState] = useState({
+        run: false,
+        steps: [
+            {
+                target: ".lhs",
+                content: "On the left hand side, you can view a stock's chart and view other details about the stock.",
+                disableBeacon: true,
+                placement: 'right',
+            },
+            {
+                target: ".rhs",
+                content: "The right hand side displays the RAG-powered LLM analysis of the stock. Sort by daily, weekly, monthly, quarterly, or yearly reports to see the stock's performance over time. Click on the info icon to view relevant definitions.",
+                placement: 'left',
+            },
+            {
+                target: ".message-input",
+                content: "You can also ask questions about the stock here and gradually gain a better understanding of the stock market!",
+            }
+        ]
+    });
 
     // RENDER
     return (
@@ -198,10 +210,11 @@ function Company() {
                 <Navbar tab={"2"} />
                 <Content
                     style={{
-                        backgroundColor: "#f5f5f5",
+                        backgroundColor: "#faebdf",
                         display: "flex",
                         justifyContent: "center",
                         width: "100%",
+                        padding: "0 0 9vh",
                     }}
                     className=""
                 >
@@ -246,8 +259,8 @@ function Company() {
                                 
                                 {/* TODO: implement custom scrollbar */}
                                 <Col className="rhs" span={12} style={{ backgroundColor: 'white', borderRadius: 8, padding: 20, height: '100%' }}>
-                                    <div style={{display: "flex"}}>
-                                        <h1 style={{ margin: "0 0 16px" }}>
+                                    <div style={{ display: "flex" }}>
+                                        <h1 className="rhs-title" style={{ margin: "0 0 16px" }}>
                                             Your
                                             <Select
                                                 defaultValue="1"
@@ -266,8 +279,8 @@ function Company() {
                                             />
                                             Report
                                         </h1>
-                                        <Button style={{marginLeft: "auto", border: "0"}} onClick={() => {setOpenDrawer(true)}}>
-                                            <InfoCircleOutlined style={{color: "black", fontSize: "2rem"}}/>
+                                        <Button style={{ marginLeft: "auto", border: "0" }} onClick={() => { setOpenDrawer(true) }}>
+                                            <InfoCircleOutlined style={{ color: "#444444", fontSize: "2.1rem" }} />
                                         </Button>
                                     </div>
 
@@ -335,10 +348,11 @@ function Company() {
                     </Layout>
                 </Content>
             </Layout >
-            <Joyride steps={steps}
+            <Joyride steps={joyrideState.steps}
                 continuous={true}
                 showProgress={true}
                 showSkipButton={true}
+                run={joyrideState.run}
                 styles={{
                     options: {
                         primaryColor: "#033d03",

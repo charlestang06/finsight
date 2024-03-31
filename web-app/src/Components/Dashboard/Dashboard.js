@@ -113,11 +113,9 @@ function Dashboard() {
 
                         <h1 style={{ fontSize: "3rem", paddingBottom: "1rem", paddingTop: "2rem" }} id="favorites">  Your favorite <i>finsights</i></h1>
                         <Row gutter={[8, 8]} justify="center" className="favorite-section">
-                            <div >
-                                {favorites.map((company) => (
-                                    <CompanyCard key={favorites.indexOf(company)} ticker={company} navigate={navigate} />
-                                ))}
-                            </div>
+                            {favorites.map((company) => (
+                                <CompanyCard key={favorites.indexOf(company)} ticker={company} navigate={navigate} />
+                            ))}
                         </Row>
                     </Content>
                 </Layout>

@@ -60,7 +60,7 @@ function Navbar(props) {
             style={{
                 display: "flex",
                 alignItems: "center",
-                background: "linear-gradient(to bottom, rgba(255,255,255,0.8), rgba(255,255,255,0.3))", // Added vertical gradient
+                background: "linear-gradient(to bottom, rgba(255,255,255,0.6), rgba(255,255,255,0))", // Added vertical gradient
                 backdropFilter: "blur(5px)",
                 paddingTop: "0.4rem",
                 paddingBottom: "0.4rem",
@@ -75,7 +75,7 @@ function Navbar(props) {
             <div className="right-buttons">
                 <Form onFinish={sendFavorite} style={{ marginRight: "1rem" }}>
                     <Form.Item className="favorite-input">
-                        <Input size="large" placeholder="Add to favorites"
+                        <Input size="large" placeholder="  Add to favorites"
                             style={{ marginRight: "1rem", marginTop: 0 }}
                             prefix={<HeartOutlined />} value={addFavorite}
                             onChange={(e) => { setAddFavorite(e.target.value) }} />
