@@ -13,10 +13,13 @@ import {
     Select,
     Button,
     Space,
+    Skeleton,
 } from "antd";
 import { HomeOutlined, PlusOutlined, SendOutlined } from "@ant-design/icons";
 import Meta from "antd/es/card/Meta.js";
 import Markdown from 'react-markdown';
+import Typewriter from 'typewriter-effect';
+import AIWriter from "react-aiwriter";
 
 import React, { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -51,9 +54,10 @@ function Company() {
         links: [],
     });
     const [days, setDays] = useState(1); // 1, 7, 30, 90, 365
-    const [analysis, setAnalysis] = useState("lorem ipsum dolor sit amet, consectetur adipiscing elit.");
+    const [analysis, setAnalysis] = useState("");
     const [messageHistory, setMessageHistory] = useState([]);
     const [currentMessage, setCurrentMessage] = useState("");
+    const [typing, setTyping] = useState(0);
 
     useEffect(() => {
         RequestUtils.get("/company/" + id).then((response) => {
@@ -64,6 +68,9 @@ function Company() {
     }, []);
 
     useEffect(() => {
+        setAnalysis("");
+        setTyping(0);
+        setMessageHistory([]);
         RequestUtils.get("/get?ticker=" + id + "&length=" + days).then((response) => {
             response.json().then((data) => {
                 setAnalysis(data.response);
@@ -84,6 +91,22 @@ function Company() {
 
     const { TabPane } = Tabs;
 
+    useEffect(() => {
+        if (typing >= 0) {
+            let intervalId = setInterval(function() {
+                const typeRef = document.querySelector(".typing-reference");
+                const typeBot = document.querySelector(".message-bot");
+                if (typeRef && 
+                    typeBot &&
+                    typeRef.innerHTML.substring(0, typeRef.innerHTML.length) === typeBot.innerHTML.substring(0, typeRef.innerHTML.length)) {
+                    setTyping(-1);
+                    console.log("finished")
+                    clearInterval(intervalId);
+                }
+            }, 500);
+         }
+    }, [typing]);
+
     function askQuestion(e) {
         e.stopPropagation();
         let message = currentMessage;
@@ -91,6 +114,7 @@ function Company() {
         RequestUtils.get("/getChat?ticker=" + id + "&length=" + days + "&query=" + message).then((response) => {
             response.json().then((data) => {
                 setMessageHistory([...messageHistory, { message: message, sender: "user" }, { message: data.response, sender: "bot" }]);
+                setTyping(messageHistory.length-1);
             });
         });
         setCurrentMessage("");
@@ -143,7 +167,7 @@ function Company() {
                                 </Col>
 
                                 <Col span={12}>
-                                    <h1 style={{ margin: "0 0 0" }}>
+                                    <h1 style={{ marginBottom: "0.75rem" }}>
                                         Your
                                         <Select
                                             defaultValue="1"
@@ -173,17 +197,37 @@ function Company() {
                                                 overflowY: "auto",
                                             }}
                                         >
-                                            {messageHistory.map((message) => (
-                                                <Markdown className="message">
-                                                    {/* <span style={{fontWeight: "bold"}}>{message.sender}: </span> */}
-                                                    {message.message}
-                                                </Markdown>
+
+                                            {messageHistory.map((message, index) => (
+                                                <div key={index} className={message.sender === "bot" ? "message-bot" : "message-user"}>
+                                                    {typing === index ? 
+
+                                                    <>
+                                                        <AIWriter className="message-bot">
+                                                            <Markdown>{message.message}</Markdown>
+                                                        </AIWriter> 
+                                                        <div style={{display: "none"}}>
+                                                            <Markdown className="typing-reference">{message.message}</Markdown>
+                                                        </div>
+                                                    </>
+                                                    :
+                                                    <Markdown>{message.message}</Markdown>
+                                                    }
+                                                </div>
                                             ))}
+
+                                            {messageHistory.length % 2 === 0 ? <Typewriter
+                                                options={{
+                                                    strings: ['...'],
+                                                    autoStart: true,
+                                                    loop: true,
+                                                  }}
+                                                /> : <></>}
                                         </div>
-                                        <div className="message-input" style={{ display: "flex", gap: "1rem" }}>
-                                            <TextArea autoSize className="ask-box" value={currentMessage} onChange={(e) => setCurrentMessage(e.target.value)} placeholder="Ask a clarifying question..." />
-                                            <Button type="primary" onClick={(e) => { askQuestion(e) }}><SendOutlined /></Button>
-                                        </div>
+                                            <div className="message-input" style={{ display: "flex", gap: "1rem" }}>
+                                                <TextArea autoSize className="ask-box" value={currentMessage} onChange={(e) => setCurrentMessage(e.target.value)} disabled={typing >= 0 || messageHistory.length % 2 == 0} placeholder="Ask a clarifying question..." />
+                                                <Button type="primary" onClick={(e) => { askQuestion(e) }} disabled={typing >= 0 || messageHistory.length % 2 == 0}><SendOutlined /></Button>
+                                            </div>
                                     </div>
                                 </Col>
                             </Row>
