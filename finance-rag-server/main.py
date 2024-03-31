@@ -259,7 +259,10 @@ def get_company_info(ticker: str):
         "description": temp_data["description"],
         "website": temp_data["website"],
         "name": temp_data["name"],
-        "marketCap": temp_data["marketCap"]
+        "marketCap": temp_data["marketCap"],
+        "sector": temp_data["sector"],
+        "indicators": temp_data["indicators"],
+        "currency": temp_data["currency"],
     }
 
 # create user or update favorites
