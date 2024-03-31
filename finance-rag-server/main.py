@@ -1,5 +1,6 @@
 # FastAPI for Finsight RAG
 # uvicorn main:app --reload
+# for randymandy: python -m uvicorn main:app --reload
 # Imports
 from fastapi.responses import PlainTextResponse
 import uvicorn

@@ -178,6 +178,7 @@ function Company() {
                                 </div>
                                     <MediumChart ticker={id} />
                             </div>
+                            </Card>
                         </Col>
 
                         <Col span={12}>
