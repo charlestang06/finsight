@@ -136,12 +136,14 @@ function Company() {
                         backgroundColor: "#f5f5f5",
                         display: "flex",
                         justifyContent: "center",
+                        width: "100%",
                     }}
-                    className="mx-auto"
+                    className=""
                 >
                     <Layout
                         style={{
                             padding: "24px 40px 24px",
+                            width: "100%",
                         }}
                     >
                         <Content
@@ -152,14 +154,15 @@ function Company() {
                                 justifyContent: "center",
                                 height: "100%",
                                 margin: 0,
+                                width: "100%",
                             }}
                         >
-                            <Row style={{ width: "100%", display: "flex" }}>
-                                <Col span={11} style={{
+                            <Row style={{ width: "100%", display: "flex", justifyContent: "center", maxHeight: "79vh" }}>
+                                <Col span={10} style={{
                                     backgroundColor: 'white',
                                     borderRadius: 8,
                                     padding: 20,
-                                    height: '80%',
+                                    height: '100%',
                                     marginRight: 28,
                                     overflow: 'auto'
                                 }}>
@@ -168,7 +171,7 @@ function Company() {
                                     <FinInfo ticker={id} />
                                 </Col>
 
-                                <Col span={12} style={{ backgroundColor: 'white', borderRadius: 8, padding: 20, height: '80%' }}>
+                                <Col span={12} style={{ backgroundColor: 'white', borderRadius: 8, padding: 20, height: '100%' }}>
                                     <h1 style={{ margin: "0 0 16px" }}>
                                         Your
                                         <Select
