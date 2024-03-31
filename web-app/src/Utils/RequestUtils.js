@@ -34,7 +34,9 @@ class RequestUtils {
             headers: {"Content-Type": "application/json", "Access-Control-Allow-Origin": "*"}, 
             body: JSON.stringify(object)
         });
-    }
+    }    
+
+
 }
 
 export default RequestUtils;

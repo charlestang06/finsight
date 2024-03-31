@@ -129,14 +129,11 @@ function Company() {
                 },
             }}
         >
-            <Layout className="white" style={{}}>
+            <Layout>
                 <Navbar tab={"2"} />
-
                 <Content
                     style={{
-                        margin: 0,
-                        background: colorBgContainer,
-                        borderRadius: borderRadiusLG,
+                        backgroundColor: "#f5f5f5",
                         display: "flex",
                         justifyContent: "center",
                     }}
@@ -146,12 +143,10 @@ function Company() {
                         style={{
                             padding: "24px 40px 24px",
                         }}
-                        className="white"
                     >
                         <Content
                             style={{
                                 minHeight: 280,
-                                background: colorBgContainer,
                                 borderRadius: borderRadiusLG,
                                 display: "flex",
                                 justifyContent: "center",
@@ -160,14 +155,21 @@ function Company() {
                             }}
                         >
                             <Row style={{ width: "100%", display: "flex" }}>
-                                <Col span={11} style={{ marginRight: "36px" }} >
+                                <Col span={11} style={{
+                                    backgroundColor: 'white',
+                                    borderRadius: 8,
+                                    padding: 20,
+                                    height: '80%',
+                                    marginRight: 28,
+                                    overflow: 'auto'
+                                }}>
                                     <MediumChart ticker={id} />
+                                    <p></p>
                                     <FinInfo ticker={id} />
-                                    
                                 </Col>
 
-                                <Col span={12}>
-                                    <h1 style={{ marginBottom: "0.75rem" }}>
+                                <Col span={12} style={{ backgroundColor: 'white', borderRadius: 8, padding: 20, height: '80%' }}>
+                                    <h1 style={{ margin: "0 0 16px" }}>
                                         Your
                                         <Select
                                             defaultValue="1"
@@ -187,7 +189,7 @@ function Company() {
                                         Report
                                     </h1>
 
-                                    <div style={{ height: '100%' }}>
+                                    <div className="message-container" style={{ height: 'calc(100% - 105px)', overflow: 'auto', lineHeight: "1.6em", margin: "0 8px" }}>
                                         <div className="message-history"
                                             style={{
                                                 display: "flex",
@@ -195,6 +197,7 @@ function Company() {
                                                 gap: "1rem",
                                                 marginBottom: "1rem",
                                                 overflowY: "auto",
+                                                fontSize: "17px",
                                             }}
                                         >
 
@@ -221,13 +224,18 @@ function Company() {
                                                     strings: ['...'],
                                                     autoStart: true,
                                                     loop: true,
-                                                  }}
+                                                    }}
                                                 /> : <></>}
                                         </div>
-                                            <div className="message-input" style={{ display: "flex", gap: "1rem" }}>
-                                                <TextArea autoSize className="ask-box" value={currentMessage} onChange={(e) => setCurrentMessage(e.target.value)} disabled={typing >= 0 || messageHistory.length % 2 == 0} placeholder="Ask a clarifying question..." />
-                                                <Button type="primary" onClick={(e) => { askQuestion(e) }} disabled={typing >= 0 || messageHistory.length % 2 == 0}><SendOutlined /></Button>
-                                            </div>
+                                    </div>
+                                    <div className="message-input" style={{ marginTop: 16, display: "flex", gap: "0.5rem" }}>
+                                        <TextArea autoSize className="ask-box" value={currentMessage} onChange={(e) => setCurrentMessage(e.target.value)} disabled={typing >= 0 || messageHistory.length % 2 == 0} placeholder="Ask a clarifying question..." style={{ fontSize: '16px' }} />
+                                        <Button type="primary"  disabled={typing >= 0 || messageHistory.length % 2 == 0} onClick={(e) => { askQuestion(e) }}
+                                            onKeyDown={(e) => {
+                                                if (e.key === 'Enter' && !(typing >= 0 || messageHistory.length % 2 == 0)) askQuestion(e)
+                                            }}>
+                                            <SendOutlined />
+                                        </Button>
                                     </div>
                                 </Col>
                             </Row>

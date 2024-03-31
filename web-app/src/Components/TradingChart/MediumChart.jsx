@@ -17,8 +17,7 @@ function MediumChart({ticker}) {
             ]
           ],
           "chartOnly": false,
-          "width": 550,
-          "height": 400,
+          "width": "100%",
           "locale": "en",
           "colorTheme": "light",
           "autosize": true,
