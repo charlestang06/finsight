@@ -14,6 +14,7 @@ import RequestUtils from "../../Utils/RequestUtils";
 import Typewriter from "typewriter-effect";
 import { DownOutlined } from "@ant-design/icons";
 import Joyride from 'react-joyride';
+import RocketImg from "../../assets/images/rocket.png";
 
 import {
     Row,
@@ -21,6 +22,7 @@ import {
     ConfigProvider,
     Layout,
     theme,
+    Image,
 } from "antd";
 import Meta from "antd/es/card/Meta.js";
 import Regex from "../regex.js"
@@ -118,7 +120,7 @@ function Dashboard() {
                             padding: "0 0 9vh",
                         }}
                     >
-                        <h1 style={{ fontSize: "4rem", paddingTop: "6rem", paddingBottom: "6rem" }} className="typewriter">
+                        <h1 style={{ fontSize: "4rem", paddingTop: "6rem", paddingBottom: "1rem" }} className="typewriter">
                             <Typewriter
                                 onInit={(typewriter) => {
                                     typewriter
@@ -138,7 +140,11 @@ function Dashboard() {
                                 }}
                             /> </h1>
 
-                        <h1 style={{ fontSize: "4rem", marginTop: "6rem", paddingBottom: "6rem" }}>
+                        <h2 style={{  color: "grey", fontSize: "2rem", fontWeight: "light", paddingBottom: "2rem" }} className="typewriter">
+                        😎 Your AI finance bro 😎
+                        </h2>
+                        <img id="box" src={RocketImg} width={200} alt="rocket" style={{float: "left", marginTop:"-1rem", marginLeft: "2rem"}}></img>
+                        <h1 style={{ fontSize: "4rem", marginTop: "6rem", paddingBottom: "4rem" }}>
                             <a href="#favorites" style={{ color: "black" }}><DownOutlined className="floating" /></a>
                         </h1>
 
