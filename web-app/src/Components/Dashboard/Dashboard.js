@@ -76,12 +76,13 @@ function Dashboard() {
             },
             {
                 target: ".favorite-section i",
-                content: "Once you have a stock in your favorites, it will display here. Click on it to learn more about that stock and gain LLM-powered investing advice.",
+                content: "Once you have a stock in your favorites, it will display here. Click on it to learn more about the stock and gain LLM-powered investing advice.",
             }
         ]
     })
 
     useEffect(() => {
+        if (!user) return
         RequestUtils.get("/get_tutorial/" + user.uid).then((response) => {
             response.json().then((data) => {
                 if (data >= 1) {
@@ -106,10 +107,10 @@ function Dashboard() {
     useEffect(() => {
         const hash = window.location.hash.slice(1);
         if (hash) {
-          const element = document.getElementById(hash);
-          if (element) element.scrollIntoView();
+            const element = document.getElementById(hash);
+            if (element) element.scrollIntoView();
         }
-     }, []);
+    }, []);
 
     useEffect(() => {
         if (!joyrideCompleted) {
@@ -193,18 +194,20 @@ function Dashboard() {
                     </Content>
                 </Layout>
             </ConfigProvider>
-            {!joyrideCompleted ? <Joyride
-                steps={joyrideState.steps}
-                callback={handleJoyrideCallback}
-                continuous={true}
-                showProgress={true}
-                showSkipButton={true}
-                styles={{
-                    options: {
-                        primaryColor: "#033d03",
-                    }
-                }}
-            /> : <></>}
+            {!joyrideCompleted ?
+                <Joyride
+                    steps={joyrideState.steps}
+                    callback={handleJoyrideCallback}
+                    continuous={true}
+                    showProgress={true}
+                    showSkipButton={true}
+                    styles={{
+                        options: {
+                            primaryColor: "#033d03",
+                        }
+                    }}
+                />
+                : <></>}
         </>
     );
 }

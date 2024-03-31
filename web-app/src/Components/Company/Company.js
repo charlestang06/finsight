@@ -53,11 +53,11 @@ function Company() {
     // AUTHENTICATION
     const { userImpl } = useContext(AuthContext);
     let params = useParams();
-    const [ user, loading ] = useAuthState(auth)
-    
+    const [user, loading] = useAuthState(auth)
+
     // useEffect(() => {
     //     if (user) {
-            
+
     //     }
     // }, [user]);
 
@@ -144,7 +144,7 @@ function Company() {
                     const typeRef = document.querySelector(".typing-reference");
                     const typeBots = document.querySelectorAll(".message-bot");
                     const typeBot = typeBots[typeBots.length - 1];
-                    if (typeRef && 
+                    if (typeRef &&
                         typeBot &&
                         typeBot.innerHTML &&
                         typeBot.innerHTML.includes(typeRef.innerHTML)) {
@@ -166,7 +166,7 @@ function Company() {
                     run: true,
                 }));
             }, 1300);
-    
+
             return () => clearTimeout(timer);
         }
     }, []);
@@ -235,12 +235,22 @@ function Company() {
             },
             {
                 target: ".rhs",
-                content: "The right hand side displays the RAG-powered LLM analysis of the stock. Sort by daily, weekly, monthly, quarterly, or yearly reports to see the stock's performance over time. Click on the info icon to view relevant definitions.",
+                content: "The right hand side displays the RAG-powered analysis of the stock.",
+                placement: 'left',
+            },
+            {
+                target: ".select-timeframe",
+                content: "Sort by daily, weekly, monthly, quarterly, or yearly reports to see the stock's performance over time.",
+                placement: 'left',
+            },
+            {
+                target: ".info",
+                content: "Unfamiliar with some terms? Click on the info icon to view their definitions.",
                 placement: 'left',
             },
             {
                 target: ".message-input",
-                content: "You can also ask clarifying questions about the stock analysis here!",
+                content: "You can also ask Finn any questions regarding the stock or investing here!",
                 placement: 'top',
             }
         ]
@@ -287,33 +297,33 @@ function Company() {
                             }}
                         >
                             <Row style={{ width: "100%", display: "flex", justifyContent: "center", height: "79vh" }}>
-                                    <Col className="lhs" span={10} style={{
-                                        backgroundColor: 'white',
-                                        borderRadius: 8,
-                                        height: '100%',
-                                        marginRight: 28,
-                                        overflow: 'auto'
-                                    }}>
-                                        <Scrollbars style={{height: "100%"}}>
-                                            <div style={{
-                                                backgroundColor: 'white',
-                                                borderRadius: 8,
-                                                padding: "20px",
-                                                height: '100%',
-                                            }}>
-                                                <MediumChart ticker={id} />
-                                                <p></p>
-                                                <FinInfo ticker={id} />
-                                            </div>
-                                        </Scrollbars>
-                                    </Col>
-                                
-                                {/* TODO: implement custom scrollbar */}
+                                <Col className="lhs" span={10} style={{
+                                    backgroundColor: 'white',
+                                    borderRadius: 8,
+                                    height: '100%',
+                                    marginRight: 28,
+                                    overflow: 'auto'
+                                }}>
+                                    <Scrollbars style={{ height: "100%" }}>
+                                        <div style={{
+                                            backgroundColor: 'white',
+                                            borderRadius: 8,
+                                            padding: "20px",
+                                            height: '100%',
+                                        }}>
+                                            <MediumChart ticker={id} />
+                                            <p></p>
+                                            <FinInfo ticker={id} />
+                                        </div>
+                                    </Scrollbars>
+                                </Col>
+
                                 <Col className="rhs" span={12} style={{ backgroundColor: 'white', borderRadius: 8, padding: 20, height: '100%' }}>
                                     <div style={{ display: "flex" }}>
                                         <h1 className="rhs-title" style={{ margin: "0 0 16px" }}>
                                             Your
                                             <Select
+                                                className="select-timeframe"
                                                 defaultValue="1"
                                                 style={{
                                                     margin: "0 16px",
@@ -331,7 +341,7 @@ function Company() {
                                             Report
                                         </h1>
                                         <Button style={{ marginLeft: "auto", border: "0" }} onClick={() => { setOpenDrawer(true) }}>
-                                            <InfoCircleOutlined style={{ color: "#444444", fontSize: "2.1rem" }} />
+                                            <InfoCircleOutlined className="info" style={{ color: "#444444", fontSize: "2.1rem" }} />
                                         </Button>
                                     </div>
 
@@ -350,46 +360,46 @@ function Company() {
                                             {messageHistory.map((message, index) => (
                                                 <>
                                                     <div key={index} className={message.sender === "bot" ? "message-bot" : "message-user"}>
-                                                        {typing === index ? 
+                                                        {typing === index ?
 
-                                                        <AIWriter>
-                                                            <Markdown>{message.message}</Markdown>
-                                                        </AIWriter> 
-                                                        :
-                                                        <>
-                                                            {message.sender === "user" ? <UserOutlined /> : <></>}
-                                                            <Markdown>{message.message}</Markdown>
-                                                        </>
+                                                            <AIWriter>
+                                                                <Markdown>{message.message}</Markdown>
+                                                            </AIWriter>
+                                                            :
+                                                            <>
+                                                                {message.sender === "user" ? <UserOutlined /> : <></>}
+                                                                <Markdown>{message.message}</Markdown>
+                                                            </>
                                                         }
                                                     </div>
-                                                    {typing === index ? <div style={{display: "none"}}>
-                                                    <Markdown className="typing-reference">{message.message}</Markdown>
+                                                    {typing === index ? <div style={{ display: "none" }}>
+                                                        <Markdown className="typing-reference">{message.message}</Markdown>
                                                     </div> : <></>}
                                                 </>
                                             ))}
 
-                                            {analysis.length == 0 || messageHistory.length % 2 === 0 ? 
-                                            <div className="beep-boop">
-                                                <Typewriter
-                                                    options={{
-                                                        strings: ['Beep boop beep boop, generating...'],
-                                                        autoStart: true,
-                                                        loop: true,
-                                                        delay: 50,
-                                                        deleteSpeed: 0,
+                                            {analysis.length == 0 || messageHistory.length % 2 === 0 ?
+                                                <div className="beep-boop">
+                                                    <Typewriter
+                                                        options={{
+                                                            strings: ['Beep boop beep boop, generating...'],
+                                                            autoStart: true,
+                                                            loop: true,
+                                                            delay: 50,
+                                                            deleteSpeed: 0,
                                                         }}
                                                     />
-                                            </div> : <></>}
+                                                </div> : <></>}
                                         </div>
                                     </div>
                                     <div className="message-input" style={{ marginTop: 16, display: "flex", gap: "0.5rem" }}>
-                                        <TextArea autoSize className="ask-box" value={currentMessage} onChange={(e) => setCurrentMessage(e.target.value)} 
-                                            disabled={typing >= 0 || messageHistory.length % 2 == 0} 
-                                            placeholder="Ask a clarifying question..." style={{ fontSize: '16px' }} 
+                                        <TextArea autoSize className="ask-box" value={currentMessage} onChange={(e) => setCurrentMessage(e.target.value)}
+                                            disabled={typing >= 0 || messageHistory.length % 2 == 0}
+                                            placeholder="Ask a clarifying question..." style={{ fontSize: '16px' }}
                                             onKeyDown={(e) => {
                                                 if (e.key === 'Enter' && !(typing >= 0 || messageHistory.length % 2 == 0)) askQuestion(e)
-                                            }}/>
-                                        <Button type="primary"  disabled={typing >= 0 || messageHistory.length % 2 == 0} onClick={(e) => { askQuestion(e) }}>
+                                            }} />
+                                        <Button type="primary" disabled={typing >= 0 || messageHistory.length % 2 == 0} onClick={(e) => { askQuestion(e) }}>
                                             <SendOutlined />
                                         </Button>
                                     </div>
@@ -399,18 +409,20 @@ function Company() {
                     </Layout>
                 </Content>
             </Layout >
-            {!joyrideCompanyCompleted ? <Joyride steps={joyrideState.steps}
-                continuous={true}
-                showProgress={true}
-                showSkipButton={true}
-                callback={handleJoyrideCallback}
-                run={joyrideState.run}
-                styles={{
-                    options: {
-                        primaryColor: "#033d03",
-                    }
-                }}
-            /> : <></>}
+            {!joyrideCompanyCompleted ?
+                <Joyride steps={joyrideState.steps}
+                    continuous={true}
+                    showProgress={true}
+                    showSkipButton={true}
+                    callback={handleJoyrideCallback}
+                    run={joyrideState.run}
+                    styles={{
+                        options: {
+                            primaryColor: "#033d03",
+                        }
+                    }}
+                />
+                : <></>}
         </ConfigProvider >
 
     );

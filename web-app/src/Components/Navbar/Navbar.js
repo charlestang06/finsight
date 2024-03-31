@@ -35,7 +35,6 @@ function Navbar(props) {
         if (user) {
             setID(user.uid);
             RequestUtils.get("/get_favorites/" + user.uid).then((response) => {
-                console.log(id)
                 response.json().then((data) => {
                     setAllFavorites(data);
                 });
