@@ -23,3 +23,15 @@
   cursor: pointer;
   transition: all 0.3s ease;
 }
+
+h1 {
+  line-height: 1em;
+}
+
+.message-user {
+  border-radius: 8px;
+  background-color: #FDF7F2;
+  padding: 0.3rem 1rem;
+  display: flex;
+  gap: 0.5rem;
+}
