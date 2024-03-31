@@ -5,7 +5,7 @@ import {
     HeartOutlined,
     LogoutOutlined,
 } from "@ant-design/icons";
-import { Button, Layout, Menu, Modal, Input, Form } from "antd";
+import { Button, Layout, Menu, Modal, Input, Form, ConfigProvider} from "antd";
 import { BiBuildingHouse, BiLogOut, BiSolidCity } from "react-icons/bi";
 import { useNavigate } from "react-router-dom";
 import "./Navbar.css";
@@ -81,7 +81,6 @@ function Navbar(props) {
     const { setUserImpl } = useContext(AuthContext);
     let [allFavorites, setAllFavorites] = useState([]);
 
-
     let [id, setID] = useState("");
 
     useEffect(() => {
@@ -97,7 +96,7 @@ function Navbar(props) {
 
     const sendFavorite = () => {
         if (user) {
-            if (tickers.includes(addFavorite) && addFavorite !== "") {
+            if (tickers.includes(addFavorite) && !allFavorites.includes(addFavorite) && addFavorite !== "") {
                 RequestUtils.post("/post_favorites?user_id=" + user.uid, { "favorites": [...allFavorites, addFavorite] }).then((response) => {
                     console.log(response);
                 });
@@ -112,7 +111,8 @@ function Navbar(props) {
             style={{
                 display: "flex",
                 alignItems: "center",
-                backgroundColor: "white",
+                backgroundColor: "#faece0",
+                paddingTop: "1rem",
             }}
         >
             <div className="logo-container" onClick={() => navigate("/dashboard")}>
