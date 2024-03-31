@@ -36,6 +36,8 @@ import "./Company.css";
 import RequestUtils from "../../Utils/RequestUtils";
 import MediumChart from "../TradingChart/MediumChart";
 import FinInfo from "../TradingChart/FinInfo";
+import Joyride from 'react-joyride';
+
 import DefinitionDrawer from "./DefinitionDrawer";
 import MessageComponent from "./MessageComponent";
 import definitions from "./definitions.js";
@@ -153,7 +155,7 @@ function Company() {
         setCurrentMessage("");
         RequestUtils.get("/getChat?ticker=" + id + "&length=" + days + "&query=" + message).then((response) => {
             response.json().then((data) => {
-                setTyping(messageHistory.length+1);
+                setTyping(messageHistory.length + 1);
                 setMessageHistory([...messageHistory, { message: message, sender: "user" }, { message: data.response, sender: "bot" }]);
             });
         });
@@ -162,6 +164,24 @@ function Company() {
     useEffect(() => {
         if (document.querySelector(".beep-boop")) document.querySelector(".beep-boop").scrollIntoView(false);
     }, [currentMessage]);
+
+    const steps = [
+        {
+            target: ".lhs",
+            content: "On the left hand side, you can view a stock's chart and view other details about the stock.",
+            disableBeacon: true,
+            placement: 'right',
+        },
+        {
+            target: ".rhs",
+            content: "The right hand side displays the RAG-powered LLM analysis of the stock. Sort by daily, weekly, monthly, quarterly, or yearly reports to see the stock's performance over time. Click on the info icon to view relevant definitions.",
+            placemenet: 'left',
+        },
+        {
+            target: ".message-input",
+            content: "You can also ask questions about the stock here and gradually gain a better understanding of the stock market!",
+        }
+    ]
 
     // RENDER
     return (
@@ -203,7 +223,7 @@ function Company() {
                             }}
                         >
                             <Row style={{ width: "100%", display: "flex", justifyContent: "center", height: "79vh" }}>
-                                    <Col span={10} style={{
+                                    <Col classname="lhs" span={10} style={{
                                         backgroundColor: 'white',
                                         borderRadius: 8,
                                         height: '100%',
@@ -225,26 +245,31 @@ function Company() {
                                     </Col>
                                 
                                 {/* TODO: implement custom scrollbar */}
-                                <Col span={12} style={{ backgroundColor: 'white', borderRadius: 8, padding: 20, height: '100%' }}>
-                                    <h1 style={{ margin: "0 0 16px" }}>
-                                        Your
-                                        <Select
-                                            defaultValue="1"
-                                            style={{
-                                                margin: "0 16px",
-                                                width: 120,
-                                            }}
-                                            onChange={(value) => setDays(value)}
-                                            options={[
-                                                { value: "1", label: "Daily" },
-                                                { value: "7", label: "Weekly" },
-                                                { value: "30", label: "Monthly" },
-                                                { value: "90", label: "Quarterly" },
-                                                { value: "365", label: "Yearly" },
-                                            ]}
-                                        />
-                                        Report
-                                    </h1>
+                                <Col className="rhs" span={12} style={{ backgroundColor: 'white', borderRadius: 8, padding: 20, height: '100%' }}>
+                                    <div style={{display: "flex"}}>
+                                        <h1 style={{ margin: "0 0 16px" }}>
+                                            Your
+                                            <Select
+                                                defaultValue="1"
+                                                style={{
+                                                    margin: "0 16px",
+                                                    width: 120,
+                                                }}
+                                                onChange={(value) => setDays(value)}
+                                                options={[
+                                                    { value: "1", label: "Daily" },
+                                                    { value: "7", label: "Weekly" },
+                                                    { value: "30", label: "Monthly" },
+                                                    { value: "90", label: "Quarterly" },
+                                                    { value: "365", label: "Yearly" },
+                                                ]}
+                                            />
+                                            Report
+                                        </h1>
+                                        <Button style={{marginLeft: "auto", border: "0"}} onClick={() => {setOpenDrawer(true)}}>
+                                            <InfoCircleOutlined style={{color: "black", fontSize: "2rem"}}/>
+                                        </Button>
+                                    </div>
 
                                     <div className="message-container" style={{ height: 'calc(100% - 105px)', overflow: 'auto', lineHeight: "1.6em", marginLeft: "8px", paddingRight: "1rem" }}>
                                         <div className="message-history"
@@ -310,6 +335,16 @@ function Company() {
                     </Layout>
                 </Content>
             </Layout >
+            <Joyride steps={steps}
+                continuous={true}
+                showProgress={true}
+                showSkipButton={true}
+                styles={{
+                    options: {
+                        primaryColor: "#033d03",
+                    }
+                }}
+            />
         </ConfigProvider >
 
     );
