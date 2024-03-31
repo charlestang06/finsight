@@ -268,7 +268,7 @@ def get_company_info(ticker: str):
 # create user or update favorites
 def send_user_favorites(user_id: str, favorites: List[str]):
     user_ref = db.collection("users").document(user_id)
-    user_ref.set(
+    user_ref.update(
         {
             "favorites": favorites
         })
@@ -280,6 +280,26 @@ def get_user_favorites(user_id: str):
     except:
         favorites = []
     return favorites
+
+def get_tutorial(user_id: str):
+    try:
+        user_ref = db.collection("users").document(user_id)
+        tutorial = int(user_ref.get().to_dict()["tutorial"])
+    except:
+        user_ref = db.collection("users").document(user_id)
+        user_ref.update(
+        {
+            "tutorial": 0
+        })
+        tutorial = 0
+    return tutorial
+
+def set_tutorial(user_id: str, tutorial: int):
+    user_ref = db.collection("users").document(user_id)
+    user_ref.update(
+        {
+            "tutorial": tutorial
+        })
 
 # App Configs
 app = FastAPI(
@@ -324,6 +344,16 @@ def favorites(user_id: str):
 @app.post("/post_favorites")
 def favorites(user_id: str, favorites: List[str]):
     send_user_favorites(user_id, favorites)
+    return {"response": True}
+
+@app.get("/get_tutorial/{user_id}")
+def tutorial(user_id: str):
+    response = get_tutorial(user_id)
+    return response
+
+@app.post("/post_tutorial")
+def tutorial(user_id: str, tutorial: int):
+    set_tutorial(user_id, tutorial)
     return {"response": True}
 
 if __name__ == "__main__":

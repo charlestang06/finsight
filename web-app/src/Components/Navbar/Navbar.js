@@ -5,7 +5,7 @@ import {
     HeartOutlined,
     LogoutOutlined,
 } from "@ant-design/icons";
-import { Button, Layout, Menu, Modal, Input, Form, ConfigProvider} from "antd";
+import { Button, Layout, Menu, Modal, Input, Form, ConfigProvider } from "antd";
 import { BiBuildingHouse, BiLogOut, BiSolidCity } from "react-icons/bi";
 import { useNavigate } from "react-router-dom";
 import "./Navbar.css";
@@ -60,8 +60,11 @@ function Navbar(props) {
             style={{
                 display: "flex",
                 alignItems: "center",
-                backgroundColor: "#faece0",
-                paddingTop: "1rem",
+                background: "linear-gradient(to bottom, rgba(255,255,255,0.8), rgba(255,255,255,0.3))", // Added vertical gradient
+                backdropFilter: "blur(5px)",
+                paddingTop: "0.4rem",
+                paddingBottom: "0.4rem",
+                height: "72px",
             }}
         >
             <div className="logo-container" onClick={() => navigate("/dashboard")}>
@@ -71,23 +74,13 @@ function Navbar(props) {
 
             <div className="right-buttons">
                 <Form onFinish={sendFavorite} style={{ marginRight: "1rem" }}>
-                    <Form.Item>
+                    <Form.Item className="favorite-input">
                         <Input size="large" placeholder="Add to favorites"
                             style={{ marginRight: "1rem", marginTop: 0 }}
                             prefix={<HeartOutlined />} value={addFavorite}
                             onChange={(e) => { setAddFavorite(e.target.value) }} />
                     </Form.Item>
                 </Form>
-                {/* <Button
-                    onClick={() => {
-                        navigate("/profile/" + id);
-                    }}
-                    className="nobg"
-                >
-                    <UserOutlined
-                        style={{ fontSize: "20px", color: "black", marginRight: "25px" }}
-                    />
-                </Button> */}
 
                 <Button onClick={() => {
                     navigate("/");
@@ -96,7 +89,7 @@ function Navbar(props) {
                     <LogoutOutlined style={{ fontSize: "20px", color: "black" }} />
                 </Button>
             </div>
-        </Header>
+        </Header >
     );
 }
 

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState, setState } from "react";
 import { useNavigate } from "react-router";
 import { useAuthState } from "react-firebase-hooks/auth";
 
@@ -13,6 +13,7 @@ import "./Dashboard.css";
 import RequestUtils from "../../Utils/RequestUtils";
 import Typewriter from "typewriter-effect";
 import { DownOutlined } from "@ant-design/icons";
+import Joyride from 'react-joyride';
 
 import {
     Row,
@@ -44,7 +45,6 @@ function Dashboard() {
     const [favorites, setFavorites] = useState([]);
     const [id, setId] = useState(0);
 
-
     useEffect(() => {
         if (user) {
             setId(user.uid);
@@ -59,6 +59,23 @@ function Dashboard() {
 
     const { Content } = Layout;
 
+    const steps = [
+        {
+            target: "html",
+            content: "Welcome to Finsights! This is your dashboard where you can view your favorite stocks.",
+            disableBeacon: true,
+            placement: 'center'
+        },
+        {
+            target: ".favorite-input",
+            content: "Add a stock to your favorites by typing in the ticker symbol and pressing enter (e.g. AAPL).",
+        },
+        {
+            target: ".favorite-section",
+            content: "Once you have a stock in your favorites, it will display here. Click on it to learn more about that stock and advice on investing.",
+        }
+    ]
+
     return (
         <>
             <ConfigProvider
@@ -66,42 +83,56 @@ function Dashboard() {
                     token: { colorPrimary: "#033D03", colorBgBase: "#FDF7F2", colorBgContainer: "white" },
                 }}
             >
-                <Layout className="" style={{paddingBottom: "6rem"}}>
+                <Layout className="" style={{ paddingBottom: "6rem" }}>
                     <Navbar tab={"2"} />
                     <Content className="mx-auto text-center" style={{ textAlign: "center", alignContent: "center" }}>
-                        <h1 style={{ fontSize: "4rem", paddingTop: "6rem", paddingBottom: "6rem" }}> <Typewriter
-                            onInit={(typewriter) => {
-                                typewriter
-                                    .changeDelay(40)
-                                    .changeDeleteSpeed(40)
-                                    .typeString("Welcome to your <i>finsights</i>")
-                                    .pauseFor(1000)
-                                    .deleteChars(9)
-                                    .typeString("<i>investments</i>")
-                                    .pauseFor(1000)
-                                    .deleteChars(11)
-                                    .typeString("<i>stocks</i>")
-                                    .pauseFor(1000)
-                                    .deleteChars(6)
-                                    .typeString("<i>finsights</i>")
-                                    .start();
-                            }}
-                        /> </h1>
+                        <h1 style={{ fontSize: "4rem", paddingTop: "6rem", paddingBottom: "6rem" }} className="typewriter">
+                            <Typewriter
+                                onInit={(typewriter) => {
+                                    typewriter
+                                        .changeDelay(40)
+                                        .changeDeleteSpeed(40)
+                                        .typeString("Welcome to your <i>finsights</i>")
+                                        .pauseFor(1000)
+                                        .deleteChars(9)
+                                        .typeString("<i>investments</i>")
+                                        .pauseFor(1000)
+                                        .deleteChars(11)
+                                        .typeString("<i>stocks</i>")
+                                        .pauseFor(1000)
+                                        .deleteChars(6)
+                                        .typeString("<i>finsights</i>")
+                                        .start();
+                                }}
+                            /> </h1>
 
-                        <h1 style={{ fontSize: "4rem", marginTop: "6rem", paddingBottom: "6rem"}}> 
-                        <a href="#favorites" style={{color:"black"}}><DownOutlined className="floating"/></a>
+                        <h1 style={{ fontSize: "4rem", marginTop: "6rem", paddingBottom: "6rem" }}>
+                            <a href="#favorites" style={{ color: "black" }}><DownOutlined className="floating" /></a>
                         </h1>
 
-                        
-                        <h1 style={{fontSize: "3rem", paddingBottom: "1rem", paddingTop:"2rem"}} id="favorites">  Your favorite <i>finsights</i></h1>
-                        <Row gutter={[8, 8]} justify="center">
-                            {favorites.map((company) => (
-                                <CompanyCard key={favorites.indexOf(company)} ticker={company} navigate={navigate} />
-                            ))}
+
+                        <h1 style={{ fontSize: "3rem", paddingBottom: "1rem", paddingTop: "2rem" }} id="favorites">  Your favorite <i>finsights</i></h1>
+                        <Row gutter={[8, 8]} justify="center" className="favorite-section">
+                            <div >
+                                {favorites.map((company) => (
+                                    <CompanyCard key={favorites.indexOf(company)} ticker={company} navigate={navigate} />
+                                ))}
+                            </div>
                         </Row>
                     </Content>
                 </Layout>
             </ConfigProvider>
+            <Joyride
+                steps={steps}
+                continuous={true}
+                showProgress={true}
+                showSkipButton={true}
+                styles={{
+                    options: {
+                        primaryColor: "#033d03",
+                    }
+                }}
+            />
         </>
     );
 }

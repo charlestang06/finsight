@@ -36,6 +36,8 @@ import "./Company.css";
 import RequestUtils from "../../Utils/RequestUtils";
 import MediumChart from "../TradingChart/MediumChart";
 import FinInfo from "../TradingChart/FinInfo";
+import Joyride from 'react-joyride';
+
 import DefinitionDrawer from "./DefinitionDrawer";
 import MessageComponent from "./MessageComponent";
 import definitions from "./definitions.js";
@@ -157,13 +159,23 @@ function Company() {
         setCurrentMessage("");
     }
 
-    const options = [
-        { key: "1", value: "1", label: "Daily" },
-        { key: "2", value: "7", label: "Weekly" },
-        { key: "3", value: "30", label: "Monthly" },
-        { key: "4", value: "90", label: "Quarterly" },
-        { key: "5", value: "365", label: "Yearly" },
-    ];
+    const steps = [
+        {
+            target: ".lhs",
+            content: "On this page, you can view a stock's chart and view other details about the stock.",
+            disableBeacon: true,
+            placement: 'right',
+        },
+        {
+            target: ".rhs",
+            content: "You can read about review on this stock, such as performance in the past and future recommendations on investing for the future. Sort by daily, weekly, monthly, quarterly, or yearly reports to see the stock's performance over time.",
+            placemenet: 'left',
+        },
+        {
+            target: ".message-input",
+            content: "You can also ask questions about the stock here and gradually gain a better understanding of the stock market!",
+        }
+    ]
 
     // RENDER
     return (
@@ -205,7 +217,7 @@ function Company() {
                             }}
                         >
                             <Row style={{ width: "100%", display: "flex", justifyContent: "center", maxHeight: "79vh" }}>
-                                <Col span={10} style={{
+                                <Col className="lhs" span={10} style={{
                                     backgroundColor: 'white',
                                     borderRadius: 8,
                                     padding: 20,
@@ -218,27 +230,30 @@ function Company() {
                                     <FinInfo ticker={id} />
                                 </Col>
 
-                                <Col span={12} style={{ backgroundColor: 'white', borderRadius: 8, padding: 20, height: '100%' }}>
-                                    <div style={{ display: "flex" }}>
-                                        <h1 style={{ margin: "0 0 16px" }}>
-                                            Your
-                                            <Select
-                                                defaultValue="1"
-                                                style={{
-                                                    margin: "0 16px",
-                                                    width: 120,
-                                                    size: "large",
-                                                }}
-                                                onChange={(value) => setDays(value)}
-                                                dropdownStyle={{ display: 'inline-block' }}
-                                                options={options}
-                                            >
-                                            </Select>
-                                            Report
-                                        </h1>
-                                        <Button style={{ marginLeft: "auto", border: "0" }} onClick={() => { setOpenDrawer(true) }}>
-                                            <InfoCircleOutlined style={{ color: "black", fontSize: "2.5rem" }} />
-                                        </Button>
+                                <Col className="rhs" span={12} style={{ backgroundColor: 'white', borderRadius: 8, padding: 20, height: '100%' }}>
+                                    <div style={{display: "flex"}}>
+                                    <h1 className="rhs-title" style={{ margin: "0 0 16px" }}>
+                                        Your
+                                        <Select
+                                            defaultValue="1"
+                                            style={{
+                                                margin: "0 16px",
+                                                width: 120,
+                                            }}
+                                            onChange={(value) => setDays(value)}
+                                            options={[
+                                                { value: "1", label: "Daily" },
+                                                { value: "7", label: "Weekly" },
+                                                { value: "30", label: "Monthly" },
+                                                { value: "90", label: "Quarterly" },
+                                                { value: "365", label: "Yearly" },
+                                            ]}
+                                        />
+                                        Report
+                                    </h1>
+                                    <Button style={{marginLeft: "auto", border: "0"}} onClick={() => {setOpenDrawer(true)}}>
+                                        <InfoCircleOutlined style={{color: "black", fontSize: "2.5rem"}}/>
+                                    </Button>
                                     </div>
 
                                     <div className="message-container" style={{ height: 'calc(100% - 105px)', overflow: 'auto', lineHeight: "1.6em", margin: "0 8px" }}>
@@ -297,6 +312,16 @@ function Company() {
                     </Layout>
                 </Content>
             </Layout >
+            <Joyride steps={steps}
+                continuous={true}
+                showProgress={true}
+                showSkipButton={true}
+                styles={{
+                    options: {
+                        primaryColor: "#033d03",
+                    }
+                }}
+            />
         </ConfigProvider >
 
     );
