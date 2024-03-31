@@ -87,21 +87,23 @@ function Navbar(props) {
     useEffect(() => {
         if (user) {
             setID(user.uid);
-        }
-        RequestUtils.get("/get_favorites/" + user.uid).then((response) => {
-            response.json().then((data) => {
-                setAllFavorites(data);
+            RequestUtils.get("/get_favorites/" + user.uid).then((response) => {
+                response.json().then((data) => {
+                    setAllFavorites(data);
+                });
             });
-        });
+        }
     }, [user]);
 
     const sendFavorite = () => {
-        if (tickers.includes(addFavorite) && addFavorite !== "") {
-            RequestUtils.post("/post_favorites?user_id=" + user.uid, {"favorites": [...allFavorites, addFavorite]}).then((response) => {
-                console.log(response);
-            });
-            setAddFavorite("");
-            window.location.reload();
+        if (user) {
+            if (tickers.includes(addFavorite) && addFavorite !== "") {
+                RequestUtils.post("/post_favorites?user_id=" + user.uid, { "favorites": [...allFavorites, addFavorite] }).then((response) => {
+                    console.log(response);
+                });
+                setAddFavorite("");
+                window.location.reload();
+            }
         }
     }
 
@@ -119,7 +121,7 @@ function Navbar(props) {
 
 
             <div className="right-buttons">
-                <Form onFinish={sendFavorite} style={{marginRight:"1rem"}}>
+                <Form onFinish={sendFavorite} style={{ marginRight: "1rem" }}>
                     <Form.Item>
                         <Input size="large" placeholder=" add to favorites"
                             style={{ marginRight: "1rem", marginTop: 0 }}
@@ -138,7 +140,10 @@ function Navbar(props) {
                     />
                 </Button> */}
 
-                <Button onClick={() => logout()} className="nobg">
+                <Button onClick={() => {
+                    navigate("/");
+                    logout();
+                }} className="nobg">
                     <LogoutOutlined style={{ fontSize: "20px", color: "black" }} />
                 </Button>
             </div>

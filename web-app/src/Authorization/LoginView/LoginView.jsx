@@ -70,8 +70,7 @@ function LoginView(props) {
                     onFinish={login}
                 >
                     <p className="padded-text">
-                        ProjX is a platform for students to build their portfolios through
-                        project-based work.
+                    Finsight bridges the gap between new investors and financial markets as your personal, AI finance bro.
                     </p>
                     {tab === 1 ?
                         <Form.Item

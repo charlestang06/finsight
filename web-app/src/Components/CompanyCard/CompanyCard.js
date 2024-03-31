@@ -10,7 +10,8 @@ const CompanyCard = ({ ticker }) => {
 
     return (
         <Card
-            style={{ width: 300, margin: "1rem", }}
+            style={{ width: 300, margin: "0.6rem", }}
+            bodyStyle={{ padding: "12px" }}
             className="card1, glow"
             onClick={() => {
                 navigate("/companies/" + ticker);

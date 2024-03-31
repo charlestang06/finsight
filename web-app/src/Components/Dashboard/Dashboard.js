@@ -11,6 +11,7 @@ import dummyFavorites from "./dummyFavorites.js"; // Import the dummy data
 import MiniChart from "../TradingChart/MiniChart.jsx";
 import "./Dashboard.css";
 import RequestUtils from "../../Utils/RequestUtils";
+import Typewriter from "typewriter-effect";
 
 import {
     Row,
@@ -39,30 +40,18 @@ function Dashboard() {
     }, [user, loading]);
 
     const [favorites, setFavorites] = useState([]);
-    const [id, setId] = useState(auth.currentUser.uid);
+    const [id, setId] = useState(0);
 
 
     useEffect(() => {
         if (user) {
             setId(user.uid);
-        }
-        RequestUtils.get("/get_favorites/" + user.uid).then((response) => {
-            response.json().then((data) => {
-                setFavorites(data);
-                // data.forEach((ticker, index) => {
-                //     RequestUtils.get("/company/" + ticker).then((response) => {
-                //         response.json().then(
-                //             (companyData) => {
-                //                 setFavorites(prevFavorites => [
-                //                     ...prevFavorites,
-                //                     { "name": companyData["name"], "ticker": ticker, "id": index }
-                //                 ]);
-                //             }
-                //         );
-                //     });
-                // });
+            RequestUtils.get("/get_favorites/" + user.uid).then((response) => {
+                response.json().then((data) => {
+                    setFavorites(data);
+                });
             });
-        });
+        }
     }, [user]);
 
 
@@ -77,10 +66,27 @@ function Dashboard() {
             >
                 <Layout className="">
                     <Navbar tab={"2"} />
-                    <Content className="mx-auto text-center"> {/* Add 'text-center' class for center alignment */}
-                        <h1>Welcome back, user!</h1>
-                        <h1>Your favorite companies</h1>
-                        <Row gutter={[16, 16]} justify="center"> {/* Add 'justify="center"' for center alignment */}
+                    <Content className="mx-auto text-center" style={{ textAlign: "center", alignContent: "center" }}>
+                        <h1 style={{ fontSize: "2.5rem" }}> <Typewriter
+                            onInit={(typewriter) => {
+                                typewriter
+                                    .changeDelay(40)
+                                    .changeDeleteSpeed(40)
+                                    .typeString("Welcome to your <i>finsights</i>")
+                                    .pauseFor(1000)
+                                    .deleteChars(9)
+                                    .typeString("<i>investments</i>")
+                                    .pauseFor(1000)
+                                    .deleteChars(11)
+                                    .typeString("<i>stocks</i>")
+                                    .pauseFor(1000)
+                                    .deleteChars(6)
+                                    .typeString("<i>finsights</i>")
+                                    .start();
+                            }}
+                        /> </h1>
+                        
+                        <Row gutter={[8, 8]} justify="center">
                             {favorites.map((company) => (
                                 <CompanyCard key={favorites.indexOf(company)} ticker={company} navigate={navigate} />
                             ))}
