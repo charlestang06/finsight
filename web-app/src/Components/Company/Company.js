@@ -222,11 +222,13 @@ function Company() {
                                                 </div>
                                             ))}
 
-                                            {messageHistory.length % 2 === 0 ? <Typewriter
+                                            {analysis.length == 0 || messageHistory.length % 2 === 0 ? <Typewriter
                                                 options={{
-                                                    strings: ['...'],
+                                                    strings: ['Beep boop beep boop, generating...'],
                                                     autoStart: true,
                                                     loop: true,
+                                                    delay: 50,
+                                                    deleteSpeed: 0,
                                                     }}
                                                 /> : <></>}
                                         </div>

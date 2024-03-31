@@ -113,7 +113,6 @@ function Navbar(props) {
                 display: "flex",
                 alignItems: "center",
                 backgroundColor: "white",
-                height: "10vh",
             }}
         >
             <div className="logo-container" onClick={() => navigate("/dashboard")}>
@@ -125,7 +124,7 @@ function Navbar(props) {
                 <Form onFinish={sendFavorite} style={{ marginRight: "1rem" }}>
                     <Form.Item>
                         <Input size="large" placeholder=" add to favorites"
-                            style={{ marginRight: "1rem", marginTop: 0 }}
+                            style={{ marginRight: "1rem", marginTop: 0}}
                             prefix={<HeartOutlined />} value={addFavorite}
                             onChange={(e) => { setAddFavorite(e.target.value) }} />
                     </Form.Item>
