@@ -83,34 +83,36 @@ function Dashboard() {
     })
 
     useEffect(() => {
-        RequestUtils.get("/get_tutorial/" + user.uid).then((response) => {
-            response.json().then((data) => {
-                if (data >= 1) {
-                    setJoyrideState((prevState) => ({
-                        ...prevState,
-                        run: false,
-                    }));
-                    setJoyrideCompleted(true);
-                }
-                else {
-                    setJoyrideState((prevState) => ({
-                        ...prevState,
-                        run: true,
-                    }));
-                    setJoyrideCompleted(false)
-                }
-            });
-        })
+        if (user) {
+            RequestUtils.get("/get_tutorial/" + user.uid).then((response) => {
+                response.json().then((data) => {
+                    if (data >= 1) {
+                        setJoyrideState((prevState) => ({
+                            ...prevState,
+                            run: false,
+                        }));
+                        setJoyrideCompleted(true);
+                    }
+                    else {
+                        setJoyrideState((prevState) => ({
+                            ...prevState,
+                            run: true,
+                        }));
+                        setJoyrideCompleted(false)
+                    }
+                });
+            })
+        }
     }, []);
 
     // todo: fix scroll
     useEffect(() => {
         const hash = window.location.hash.slice(1);
         if (hash) {
-          const element = document.getElementById(hash);
-          if (element) element.scrollIntoView();
+            const element = document.getElementById(hash);
+            if (element) element.scrollIntoView();
         }
-     }, []);
+    }, []);
 
     useEffect(() => {
         if (!joyrideCompleted) {
@@ -162,24 +164,15 @@ function Dashboard() {
                                     typewriter
                                         .changeDelay(40)
                                         .changeDeleteSpeed(40)
-                                        .typeString("Welcome to your <i>finsights</i>")
-                                        .pauseFor(1000)
-                                        .deleteChars(9)
-                                        .typeString("<i>investments</i>")
-                                        .pauseFor(1000)
-                                        .deleteChars(11)
-                                        .typeString("<i>stocks</i>")
-                                        .pauseFor(1000)
-                                        .deleteChars(6)
-                                        .typeString("<i>finsights</i>")
+                                        .typeString("Finsight presents: <i>Finn</i>")
                                         .start();
                                 }}
                             /> </h1>
 
-                        <h2 style={{  color: "grey", fontSize: "2rem", fontWeight: "light", paddingBottom: "2rem" }} className="typewriter">
-                        😎 Your AI finance bro 😎
+                        <h2 style={{ color: "grey", fontSize: "2rem", fontWeight: "light", paddingBottom: "2rem" }} className="typewriter">
+                            😎 Your AI finance bro 😎
                         </h2>
-                        <img id="box" src={RocketImg} width={200} alt="rocket" style={{float: "left", marginTop:"-1rem", marginLeft: "2rem"}}></img>
+                        <img id="box" src={RocketImg} width={200} alt="rocket" style={{ float: "left", marginTop: "-1rem", marginLeft: "2rem" }}></img>
                         <h1 style={{ fontSize: "4rem", marginTop: "6rem", paddingBottom: "4rem" }}>
                             <a href="#favorites" style={{ color: "black" }}><DownOutlined className="floating" /></a>
                         </h1>
