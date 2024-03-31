@@ -361,9 +361,21 @@ function Company() {
                                                         </>
                                                         :
                                                         <>
-                                                            {message.sender === "user" ? <UserOutlined /> : 
-                                                            <><RobotOutlined /> Finn<p></p></>}
-                                                            <Markdown>{message.message}</Markdown>
+                                                            {message.sender === "user" ? 
+                                                            <>
+                                                                <UserOutlined /> 
+                                                                <Markdown>
+                                                                {message.message}
+                                                            </Markdown>
+                                                            </>
+                                                            : 
+                                                            <>
+                                                                <RobotOutlined /> Finn<p></p>
+                                                                <Markdown>
+                                                                    {message.message}
+                                                                </Markdown>
+                                                            </>
+                                                            }
                                                         </>
                                                         }
                                                     </div>
