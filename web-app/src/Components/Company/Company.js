@@ -13,6 +13,7 @@ import {
     Select,
     Button,
     Space,
+    Dropdown,
     Drawer,
     Typography,
     Skeleton,
@@ -20,7 +21,7 @@ import {
 import {
     InfoCircleOutlined,
 } from "@ant-design/icons";
-import { HomeOutlined, PlusOutlined, SendOutlined } from "@ant-design/icons";
+import { HomeOutlined, DownOutlined, SendOutlined } from "@ant-design/icons";
 import Meta from "antd/es/card/Meta.js";
 import Markdown from 'react-markdown';
 import Typewriter from 'typewriter-effect';
@@ -124,7 +125,7 @@ function Company() {
 
     useEffect(() => {
         if (typing >= 0) {
-            let intervalId = setInterval(function() {
+            let intervalId = setInterval(function () {
                 const typeRef = document.querySelector(".typing-reference");
                 const typeBots = document.querySelectorAll(".message-bot");
                 const typeBot = typeBots[typeBots.length - 1];
@@ -132,7 +133,7 @@ function Company() {
                     // console.log(typeRef.innerHTML)
                     console.log(typeBot.innerHTML)
                 }
-                if (typeRef && 
+                if (typeRef &&
                     typeBot &&
                     typeBot.innerHTML &&
                     typeBot.innerHTML.includes(typeRef.innerHTML)) {
@@ -140,7 +141,7 @@ function Company() {
                     clearInterval(intervalId);
                 }
             }, 500);
-         }
+        }
     }, [typing]);
 
     function askQuestion(e) {
@@ -149,12 +150,20 @@ function Company() {
         setMessageHistory([...messageHistory, { message: message, sender: "user" }]);
         RequestUtils.get("/getChat?ticker=" + id + "&length=" + days + "&query=" + message).then((response) => {
             response.json().then((data) => {
-                setTyping(messageHistory.length+1);
+                setTyping(messageHistory.length + 1);
                 setMessageHistory([...messageHistory, { message: message, sender: "user" }, { message: data.response, sender: "bot" }]);
             });
         });
         setCurrentMessage("");
     }
+
+    const options = [
+        { key: "1", value: "1", label: "Daily" },
+        { key: "2", value: "7", label: "Weekly" },
+        { key: "3", value: "30", label: "Monthly" },
+        { key: "4", value: "90", label: "Quarterly" },
+        { key: "5", value: "365", label: "Yearly" },
+    ];
 
     // RENDER
     return (
@@ -210,29 +219,26 @@ function Company() {
                                 </Col>
 
                                 <Col span={12} style={{ backgroundColor: 'white', borderRadius: 8, padding: 20, height: '100%' }}>
-                                    <div style={{display: "flex"}}>
-                                    <h1 style={{ margin: "0 0 16px" }}>
-                                        Your
-                                        <Select
-                                            defaultValue="1"
-                                            style={{
-                                                margin: "0 16px",
-                                                width: 120,
-                                            }}
-                                            onChange={(value) => setDays(value)}
-                                            options={[
-                                                { value: "1", label: "Daily" },
-                                                { value: "7", label: "Weekly" },
-                                                { value: "30", label: "Monthly" },
-                                                { value: "90", label: "Quarterly" },
-                                                { value: "365", label: "Yearly" },
-                                            ]}
-                                        />
-                                        Report
-                                    </h1>
-                                    <Button style={{marginLeft: "auto", border: "0"}} onClick={() => {setOpenDrawer(true)}}>
-                                        <InfoCircleOutlined style={{color: "black", fontSize: "2.5rem"}}/>
-                                    </Button>
+                                    <div style={{ display: "flex" }}>
+                                        <h1 style={{ margin: "0 0 16px" }}>
+                                            Your
+                                            <Select
+                                                defaultValue="1"
+                                                style={{
+                                                    margin: "0 16px",
+                                                    width: 120,
+                                                    size: "large",
+                                                }}
+                                                onChange={(value) => setDays(value)}
+                                                dropdownStyle={{ display: 'inline-block' }}
+                                                options={options}
+                                            >
+                                            </Select>
+                                            Report
+                                        </h1>
+                                        <Button style={{ marginLeft: "auto", border: "0" }} onClick={() => { setOpenDrawer(true) }}>
+                                            <InfoCircleOutlined style={{ color: "black", fontSize: "2.5rem" }} />
+                                        </Button>
                                     </div>
 
                                     <div className="message-container" style={{ height: 'calc(100% - 105px)', overflow: 'auto', lineHeight: "1.6em", margin: "0 8px" }}>
@@ -249,18 +255,18 @@ function Company() {
 
                                             {messageHistory.map((message, index) => (
                                                 <div key={index} className={message.sender === "bot" ? "message-bot" : "message-user"}>
-                                                    {typing === index ? 
+                                                    {typing === index ?
 
-                                                    <>
-                                                        <AIWriter className="message-bot">
-                                                            <Markdown>{message.message}</Markdown>
-                                                        </AIWriter> 
-                                                        <div style={{display: "none"}}>
-                                                            <Markdown className="typing-reference">{message.message}</Markdown>
-                                                        </div>
-                                                    </>
-                                                    :
-                                                    <Markdown>{message.message}</Markdown>
+                                                        <>
+                                                            <AIWriter className="message-bot">
+                                                                <Markdown>{message.message}</Markdown>
+                                                            </AIWriter>
+                                                            <div style={{ display: "none" }}>
+                                                                <Markdown className="typing-reference">{message.message}</Markdown>
+                                                            </div>
+                                                        </>
+                                                        :
+                                                        <Markdown>{message.message}</Markdown>
                                                     }
                                                 </div>
                                             ))}
@@ -272,13 +278,13 @@ function Company() {
                                                     loop: true,
                                                     delay: 50,
                                                     deleteSpeed: 0,
-                                                    }}
-                                                /> : <></>}
+                                                }}
+                                            /> : <></>}
                                         </div>
                                     </div>
                                     <div className="message-input" style={{ marginTop: 16, display: "flex", gap: "0.5rem" }}>
                                         <TextArea autoSize className="ask-box" value={currentMessage} onChange={(e) => setCurrentMessage(e.target.value)} disabled={typing >= 0 || messageHistory.length % 2 == 0} placeholder="Ask a clarifying question..." style={{ fontSize: '16px' }} />
-                                        <Button type="primary"  disabled={typing >= 0 || messageHistory.length % 2 == 0} onClick={(e) => { askQuestion(e) }}
+                                        <Button type="primary" disabled={typing >= 0 || messageHistory.length % 2 == 0} onClick={(e) => { askQuestion(e) }}
                                             onKeyDown={(e) => {
                                                 if (e.key === 'Enter' && !(typing >= 0 || messageHistory.length % 2 == 0)) askQuestion(e)
                                             }}>
