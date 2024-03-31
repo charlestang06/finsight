@@ -315,6 +315,11 @@ function Company() {
                 continuous={true}
                 showProgress={true}
                 showSkipButton={true}
+                styles={{
+                    options: {
+                        primaryColor: "#033d03",
+                    }
+                }}
             />
         </ConfigProvider >
 

@@ -110,8 +110,8 @@ function Dashboard() {
                             <a href="#favorites" style={{ color: "black" }}><DownOutlined className="floating" /></a>
                         </h1>
 
-                        
-                        <h1 style={{fontSize: "3rem", paddingBottom: "1rem", paddingTop:"2rem"}} id="favorites">  Your favorite <i>finsights</i></h1>
+
+                        <h1 style={{ fontSize: "3rem", paddingBottom: "1rem", paddingTop: "2rem" }} id="favorites">  Your favorite <i>finsights</i></h1>
                         <Row gutter={[8, 8]} justify="center" className="favorite-section">
                             <div >
                                 {favorites.map((company) => (
@@ -122,10 +122,16 @@ function Dashboard() {
                     </Content>
                 </Layout>
             </ConfigProvider>
-            <Joyride steps={steps}
+            <Joyride
+                steps={steps}
                 continuous={true}
                 showProgress={true}
                 showSkipButton={true}
+                styles={{
+                    options: {
+                        primaryColor: "#033d03",
+                    }
+                }}
             />
         </>
     );
