@@ -42,7 +42,6 @@ const MarkdownWithTooltips = ({ children }) => {
                 );
                 if (keyword) {
                     // Render the word as a Tooltip if it matches a keyword
-                    console.log('Keyword found:', keyword);
                     return (
                         <Tooltip key={index} title={keywordsTooltips[keyword]}>
                             {word}

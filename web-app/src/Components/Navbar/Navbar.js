@@ -36,6 +36,7 @@ function Navbar(props) {
         if (user) {
             setID(user.uid);
             RequestUtils.get("/get_favorites/" + user.uid).then((response) => {
+                console.log(id)
                 response.json().then((data) => {
                     setAllFavorites(data);
                 });
@@ -46,7 +47,7 @@ function Navbar(props) {
     const sendFavorite = () => {
         if (user) {
             if (tickers.includes(addFavorite) && addFavorite !== "") {
-                RequestUtils.post("/post_favorites?user_id=" + user.uid, { "favorites": [...allFavorites, addFavorite] }).then((response) => {
+                RequestUtils.post("/post_favorites?user_id=" + user.uid, [...allFavorites, addFavorite]).then((response) => {
                     console.log(response);
                 });
                 setAddFavorite("");
