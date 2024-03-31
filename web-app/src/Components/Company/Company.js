@@ -250,7 +250,7 @@ function Company() {
             },
             {
                 target: ".message-input",
-                content: "You can also ask Finn any questions regarding the stock or investing here!",
+                content: "You can also ask Finn any questions regarding the stock or about investing here!",
                 placement: 'top',
             }
         ]

@@ -77,6 +77,7 @@ function Dashboard() {
             {
                 target: ".favorite-section i",
                 content: "Once you have a stock in your favorites, it will display here. Click on it to learn more about the stock and gain LLM-powered investing advice.",
+                placement: "top"
             }
         ]
     })
