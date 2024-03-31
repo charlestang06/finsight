@@ -162,16 +162,7 @@ function Dashboard() {
                                     typewriter
                                         .changeDelay(40)
                                         .changeDeleteSpeed(40)
-                                        .typeString("Welcome to your <i>finsights</i>")
-                                        .pauseFor(1000)
-                                        .deleteChars(9)
-                                        .typeString("<i>investments</i>")
-                                        .pauseFor(1000)
-                                        .deleteChars(11)
-                                        .typeString("<i>stocks</i>")
-                                        .pauseFor(1000)
-                                        .deleteChars(6)
-                                        .typeString("<i>finsights</i>")
+                                        .typeString("Finsight presents: <i>Finn</i>")
                                         .start();
                                 }}
                             /> </h1>

@@ -21,7 +21,7 @@ import {
 import {
     InfoCircleOutlined,
 } from "@ant-design/icons";
-import { HomeOutlined, PlusOutlined, SendOutlined, UserOutlined } from "@ant-design/icons";
+import { HomeOutlined, PlusOutlined, SendOutlined, UserOutlined, RobotOutlined } from "@ant-design/icons";
 import Meta from "antd/es/card/Meta.js";
 import Scrollbars from "react-custom-scrollbars-2"
 import Markdown from 'react-markdown';
@@ -362,14 +362,31 @@ function Company() {
                                                     <div key={index} className={message.sender === "bot" ? "message-bot" : "message-user"}>
                                                         {typing === index ?
 
+                                                        <>
+                                                            <RobotOutlined /> Finn
+                                                            <p></p>
                                                             <AIWriter>
                                                                 <Markdown>{message.message}</Markdown>
                                                             </AIWriter>
-                                                            :
+                                                        </>
+                                                        :
+                                                        <>
+                                                            {message.sender === "user" ? 
                                                             <>
-                                                                {message.sender === "user" ? <UserOutlined /> : <></>}
-                                                                <Markdown>{message.message}</Markdown>
+                                                                <UserOutlined /> 
+                                                                <Markdown>
+                                                                {message.message}
+                                                            </Markdown>
                                                             </>
+                                                            : 
+                                                            <>
+                                                                <RobotOutlined /> Finn<p></p>
+                                                                <Markdown>
+                                                                    {message.message}
+                                                                </Markdown>
+                                                            </>
+                                                            }
+                                                        </>
                                                         }
                                                     </div>
                                                     {typing === index ? <div style={{ display: "none" }}>
@@ -378,15 +395,16 @@ function Company() {
                                                 </>
                                             ))}
 
-                                            {analysis.length == 0 || messageHistory.length % 2 === 0 ?
-                                                <div className="beep-boop">
-                                                    <Typewriter
-                                                        options={{
-                                                            strings: ['Beep boop beep boop, generating...'],
-                                                            autoStart: true,
-                                                            loop: true,
-                                                            delay: 50,
-                                                            deleteSpeed: 0,
+                                            {analysis.length == 0 || messageHistory.length % 2 === 0 ? 
+                                            <div className="beep-boop">
+                                                <RobotOutlined /> Finn<p></p>
+                                                <Typewriter
+                                                    options={{
+                                                        strings: ['Beep boop beep boop, generating...'],
+                                                        autoStart: true,
+                                                        loop: true,
+                                                        delay: 50,
+                                                        deleteSpeed: 0,
                                                         }}
                                                     />
                                                 </div> : <></>}
