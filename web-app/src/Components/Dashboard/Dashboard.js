@@ -56,7 +56,7 @@ function Dashboard() {
             >
                 <Layout className="">
                     <Navbar tab={"2"} />
-                    <Content className="mx-auto text-center">
+                    <Content className="mx-auto text-center" style={{ backgroundColor: '#f0f2f5' }}>
                         <h1>Welcome back, user!</h1>
                         <h1>Your favorite companies</h1>
                         <Row gutter={[8, 8]} justify="center">

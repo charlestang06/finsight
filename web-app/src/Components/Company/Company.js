@@ -105,14 +105,11 @@ function Company() {
                 },
             }}
         >
-            <Layout className="white" style={{}}>
+            <Layout>
                 <Navbar tab={"2"} />
-
                 <Content
                     style={{
-                        margin: 0,
-                        background: colorBgContainer,
-                        borderRadius: borderRadiusLG,
+                        backgroundColor: "#f5f5f5",
                         display: "flex",
                         justifyContent: "center",
                     }}
@@ -122,12 +119,10 @@ function Company() {
                         style={{
                             padding: "24px 40px 24px",
                         }}
-                        className="white"
                     >
                         <Content
                             style={{
                                 minHeight: 280,
-                                background: colorBgContainer,
                                 borderRadius: borderRadiusLG,
                                 display: "flex",
                                 justifyContent: "center",
@@ -136,15 +131,20 @@ function Company() {
                             }}
                         >
                             <Row style={{ width: "100%", display: "flex" }}>
-                                <Col span={11} style={{ border: '2px #cccccc solid', borderRadius: 8, padding: 20, height: '80%' }} >
+                                <Col span={11} style={{
+                                    backgroundColor: 'white',
+                                    borderRadius: 8,
+                                    padding: 20,
+                                    height: '80%',
+                                    marginRight: 28,
+                                    overflow: 'auto'
+                                }}>
                                     <MediumChart ticker={id} />
+                                    <p></p>
                                     <FinInfo ticker={id} />
-                                    
                                 </Col>
 
-                                <Col span={1}></Col>
-
-                                <Col span={12} style={{ border: '2px #cccccc solid', borderRadius: 8, padding: 20, height: '80%' }}>
+                                <Col span={12} style={{ backgroundColor: 'white', borderRadius: 8, padding: 20, height: '80%' }}>
                                     <h1 style={{ margin: "0 0 16px" }}>
                                         Your
                                         <Select
@@ -165,7 +165,7 @@ function Company() {
                                         Report
                                     </h1>
 
-                                    <div className="message-container" style={{ height: 'calc(100% - 105px)', overflow: 'auto' }}>
+                                    <div className="message-container" style={{ height: 'calc(100% - 105px)', overflow: 'auto', lineHeight: "1.6em", margin: "0 8px" }}>
                                         <div className="message-history"
                                             style={{
                                                 display: "flex",
