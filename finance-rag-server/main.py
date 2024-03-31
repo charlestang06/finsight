@@ -268,15 +268,28 @@ def get_company_info(ticker: str):
 # create user or update favorites
 def send_user_favorites(user_id: str, favorites: List[str]):
     user_ref = db.collection("users").document(user_id)
-    user_ref.update(
-        {
-            "favorites": favorites
+    if user_ref.get().exists:
+        user_ref.update(
+            {
+                "favorites": favorites
+            })
+    else:
+        user_ref.set({
+            "favorites": [],
+            "tutorial": 0
         })
 
 def get_user_favorites(user_id: str):
     try: 
         user_ref = db.collection("users").document(user_id)
-        favorites = user_ref.get().to_dict()["favorites"]
+        if user_ref.get().exists:
+            favorites = user_ref.get().to_dict()["favorites"]
+        else:
+            favorites = []
+            user_ref.set({
+                "favorites": [],
+                "tutorial": 0
+            })
     except:
         favorites = []
     return favorites
@@ -284,7 +297,15 @@ def get_user_favorites(user_id: str):
 def get_tutorial(user_id: str):
     try:
         user_ref = db.collection("users").document(user_id)
-        tutorial = int(user_ref.get().to_dict()["tutorial"])
+        if (user_ref.get().exists):
+            tutorial = int(user_ref.get().to_dict()["tutorial"])
+        else:
+            user_ref.set(
+            {   
+                "favorites": [],
+                "tutorial": 0
+            })
+            tutorial = 0
     except:
         user_ref = db.collection("users").document(user_id)
         user_ref.update(
